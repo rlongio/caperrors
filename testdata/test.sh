@@ -1,0 +1,1 @@
+go run ../cmd/cap_errors/main.go -path=./error_files -log_path=./error_files/CapHandler.log

@@ -1,0 +1,136 @@
+Ryan,
+
+The CapHandler.log resides at /var/log/caphandler/CapHandler.log  
+
+The decode errors are here:
+
+   /var/lib/caphandler/error/database/awips/wmo
+   /var/lib/caphandler/error/database/ipaws
+   /var/lib/caphandler/error/decode/awips/wmo
+   /var/lib/caphandler/error/decode/ipaws 
+
+I've never seen any database errors here.   The files in the error directories are just the input text products (AWIPS) or nwems (IPAWS) that failed to properly decode (AWIPS) or deserialize (IPAWS).
+
+Let me know if you need examples of these and I'll get some for  you.   
+
+It's pretty simple to extract decode error info from the CapHandler.log 
+
+To extract that an AWIPS decode error occurred 
+
+-bash-4.2$  grep "error/decode/awips" CapHandler.log | grep Moved
+
+2020-07-01 00:47:15.453 [INFO ] - Moved /var/lib/caphandler/input/awips/wmo/MWSSPN.01004714.28331989.txt to /var/lib/caphandler/error/decode/awips/wmo/MWSSPN.01004714.28331989.txt
+2020-07-01 02:19:53.926 [INFO ] - Moved /var/lib/caphandler/input/awips/wmo/MWSSPN.01021951.28621728.txt to /var/lib/caphandler/error/decode/awips/wmo/MWSSPN.01021951.28621728.txt
+2020-07-01 13:03:36.581 [INFO ] - Moved /var/lib/caphandler/input/awips/wmo/ESFGRR.01130335.30534897.txt to /var/lib/caphandler/error/decode/awips/wmo/ESFGRR.01130335.30534897.txt
+
+-bash-4.2$  grep "error/decode/awips" CapHandler.log | grep Moved | wc -l
+3
+
+counts the number of AWIPS decode errors
+
+To get the AWIPS database errors use
+
+  bash-4.2$  grep "error/database/awips" CapHandler.log | grep Moved  
+
+
+Another "grep" that describes the actual error that occurred use this:
+
+-bash-4.2$ grep " Unable to decode the text product in /var/lib/caphandler/input/awips/wmo" CapHandler.log
+
+2020-07-01 00:47:15.448 [INFO ] - Unable to decode the text product in /var/lib/caphandler/input/awips/wmo/MWSSPN.01004714.28331989.txt (gov.noaa.nws.cap.exception.DecoderException: Cannot parse 'Spanish' MND issuance date/time (java.time.format.DateTimeParseException: Text '844 PM AST martes 30 junio 2020' could not be parsed at index 4))
+2020-07-01 02:19:53.921 [INFO ] - Unable to decode the text product in /var/lib/caphandler/input/awips/wmo/MWSSPN.01021951.28621728.txt (gov.noaa.nws.cap.exception.DecoderException: Cannot parse 'Spanish' MND issuance date/time (java.time.format.DateTimeParseException: Text '1014 PM AST martes 30 junio 2020' could not be parsed at index 5))
+2020-07-01 13:03:36.575 [INFO ] - Unable to decode the text product in /var/lib/caphandler/input/awips/wmo/ESFGRR.01130335.30534897.txt (gov.noaa.nws.cap.exception.DecoderException: Probabilistic Hydrologic Outlook products aren't supported)
+
+-------------------------------------------------------------------------------------------
+
+To extract the IPAWS decode errors use this:
+
+-bash-4.2$  grep  "error/decode/ipaws" CapHandler.log | grep Moved
+
+2020-07-01 00:00:09.033 [INFO ] - Moved /var/lib/caphandler/input/ipaws/01.Jul.2020.00.00.07.207dfd1c3a1-5846-4aa2-9c61-bc34585a8681.xml to /var/lib/caphandler/error/decode/ipaws/ 01.Jul.2020.00.00.07.207dfd1c3a1-5846-4aa2-9c61-bc34585a8681.xml
+
+To count number of IPAWS decode errors
+
+ -bash-4.2$  grep  "error/decode/ipaws" CapHandler.log | grep Moved | wc -l
+100
+ 
+
+To database IPAWS errors use this:
+
+    -bash-4.2$  grep  "error/decode/ipaws" CapHandler.log | grep Moved  
+
+Another extraction for the IPAWS to get the error description 
+
+grep " Unable to deserialize" CapHandler.log
+
+2020-07-01 00:00:09.014 [INFO ] - Unable to deserialize <alert> block #4 in /var/lib/caphandler/input/ipaws/01.Jul.2020.00.00.07.207dfd1c3a1-5846-4aa2-9c61-bc34585a8681.xml into an Alert object (gov.noaa.nws.cap.exception.DecoderException: <alert> block #4 in /var/lib/caphandler/input/ipaws/01.Jul.2020.00.00.07.207dfd1c3a1-5846-4aa2-9c61-bc34585a8681.xml has no <eventCode> element that has a <valueName> of 'SAME')
+2020-07-01 00:01:09.202 [INFO ] - Unable to deserialize <alert> block #3 in /var/lib/caphandler/input/ipaws/01.Jul.2020.00.01.07.207abd6ae0b-6837-4cb0-a433-83be210ba6f5.xml into an Alert object (gov.noaa.nws.cap.exception.DecoderException: <alert> block #3 in /var/lib/caphandler/input/ipaws/01.Jul.2020.00.01.07.207abd6ae0b-6837-4cb0-a433-83be210ba6f5.xml has no <eventCode> element that has a <valueName> of 'SAME')
+
+========================================================
+
+To get IPAWS response errors 
+
+Finding IPAWS resaponse errors
+
+CapLogFile=/var/log/caphandler/CapHandler.log
+
+Tot_IPAWS_ERR=`grep "ERROR: Y" $CapLogFile | wc -l`
+Tot_Code_207=`grep "ERROR: Y" $CapLogFile | grep 207 | wc -l`
+Tot_Code_215=`grep "ERROR: Y" $CapLogFile | grep 215 | wc -l`
+Tot_Code_221=`grep "ERROR: Y" $CapLogFile | grep 221 | wc -l`
+Tot_Code_223=`grep "ERROR: Y" $CapLogFile | grep 223 | wc -l`
+Tot_Code_224=`grep "ERROR: Y" $CapLogFile | grep 224 | wc -l`
+Tot_Code_218=`grep "ERROR: Y" $CapLogFile | grep 218 | wc -l`
+Tot_Code_818=`grep "ERROR: Y" $CapLogFile | grep 818 | wc -l`
+Tot_Code_303=`grep "ERROR: Y" $CapLogFile | grep 303 | wc -l`
+Tot_Code_615=`grep "ERROR: Y" $CapLogFile | grep 615 | wc -l`
+Tot_Code_602=`grep "ERROR: Y" $CapLogFile | grep 602 | wc -l`
+Tot_Code_606=`grep "ERROR: Y" $CapLogFile | grep 606 | wc -l`
+Tot_Code_610=`grep "ERROR: Y" $CapLogFile | grep 610 | wc -l`
+
+That will give the numbers of IPAWS response error codes.  If you want to see the errors remove the "| wc -l"
+
+example:
+-bash-4.2$ grep "ERROR: Y" CapHandler.log | grep 221
+
+CHANNELNAME: CAPEXCH, STATUSITEMID: 221, ERROR: Y, STATUS: invalid-CAPEXCHANGE-message
+CHANNELNAME: CAPEXCH, STATUSITEMID: 221, ERROR: Y, STATUS: invalid-CAPEXCHANGE-message
+
+Here's what a the code looks like in the log file
+
+ResponseOperation: getMessageStatus; ResponseType: N/A
+identifier: urn:oid:2.49.0.1.840.0.38aa80742ab576f7bd9d3af7cb3c53c508f1a5bd.001.1
+CHANNELNAME: CAPEXCH, STATUSITEMID: 200, ERROR: N, STATUS: Ack
+CHANNELNAME: CAPEXCH, STATUSITEMID: 202, ERROR: N, STATUS: alert-signature-is-valid
+CHANNELNAME: IPAWS, STATUSITEMID: 300, ERROR: N, STATUS: Ack
+CHANNELNAME: NWEM, STATUSITEMID: 401, ERROR: N, STATUS: message-not-disseminated-as-NWEM
+CHANNELNAME: EAS, STATUSITEMID: 501, ERROR: N, STATUS: message-not-disseminated-as-EAS
+CHANNELNAME: CMAS, STATUSITEMID: 601, ERROR: N, STATUS: message-not-disseminated-as-CMAS-Version-2
+CHANNELNAME: PUBLIC, STATUSITEMID: 800, ERROR: N, STATUS: Ack
+CHANNELNAME: IPAWS, STATUSITEMID: 802, ERROR: N, STATUS: public-blockchannel-disregarded
+2020-07-01 00:00:04.669 [INFO ] - Making attempt #1 of 5 to save the final status from IPAWS of the CAP message with ID = urn:oid:2.49.0.1.840.0.38aa80742ab576f7bd9d3af7cb3c53c508f1a5bd.001.1 in the database
+
+==================================================================================================
+
+For checking for non decode or IPAWS response use 
+
+ grep "INVESTIGATE THIS" CapHandler.log
+
+-bash-4.2$ grep "INVESTIGATE THIS" *
+CapHandler.log.2020-05-26:2020-05-26 17:17:11.196 [ERROR] - INVESTIGATE THIS EXCEPTION from NwemDecodeRoute: java.lang.NullPointerException
+CapHandler.log.2020-05-26:2020-05-26 17:18:11.415 [ERROR] - INVESTIGATE THIS EXCEPTION from NwemDecodeRoute: java.lang.NullPointerException
+CapHandler.log.2020-05-26:2020-05-26 17:20:11.236 [ERROR] - INVESTIGATE THIS EXCEPTION from NwemDecodeRoute: java.lang.NullPointerException
+
+This picks up unhandled errors that has.    Catching these are important
+
+
+Other checks are
+
+grep Error $CapLogFile
+
+grep error $CapLogFile | wc -l
+
+These pick up more unexpected errors. Sometimes there are tons, hence the | wc
+
+
+I hope this helps

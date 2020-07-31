@@ -1,0 +1,145 @@
+2020-07-09 16:42:12.703 [INFO ] - Attempting to read /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt
+2020-07-09 16:42:12.707 [INFO ] - Read /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt
+2020-07-09 16:42:12.707 [DEBUG] - The contents of /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt:
+
+
+799
+FGUS75 KPUB 091642
+ESFPUB
+COC003-009-011-015-021-023-025-027-041-043-055-061-065-071-
+079-089-099-101-105-109-119-231800-
+
+Probabilistic Hydrologic Outlook
+National Weather Service Pueblo CO
+1038 AM MDT Thu Jul 09 2020
+
+In Table 1 below...the current (CS) and historical (HS) or normal
+probabilities of exceeding minor...moderate...and major flood stages
+are listed for the valid time period.
+
+CS values indicate the probability of reaching a flood category
+based on current conditions.
+
+HS values indicate the probability of reaching a flood category
+based on historical or normal conditions.
+
+When the value of CS is more than HS...the probability of
+exceeding that level is higher than normal. When the value of CS is
+less than HS...the probability of exceeding that level is lower
+than normal.
+
+
+...Table 1--Probabilities for minor...moderate and major flooding...
+Valid Period:  07/09/2020 - 10/07/2020
+
+:    Current and Historical
+:     Chances of Exceeding
+:       Flood Categories
+:      as a Percentage (%)
+Categorical      :
+Flood Stages (ft)   :   Minor    Moderate   Major
+Location           Minor   Mod   Major :  CS   HS   CS   HS   CS   HS
+--------           -----  -----  ----- : ---  ---  ---  ---  ---  ---
+:Arkansas River
+Leadville            9.0   10.0   12.0 :  <5   <5   <5   <5   <5   <5
+Salida               8.0    9.0   10.0 :  <5   <5   <5   <5   <5   <5
+Wellsville           9.0   10.0   11.0 :  <5   <5   <5   <5   <5   <5
+Parkdale             9.0   10.0   11.0 :  <5   <5   <5   <5   <5   <5
+Canon City          10.0   12.0   14.0 :  <5   <5   <5   <5   <5   <5
+Portland             9.0   10.0   11.0 :  <5   <5   <5   <5   <5   <5
+Pueblo               8.0    9.0   11.0 :   9    9   <5   <5   <5   <5
+Avondale             7.0    8.0    9.0 :  31   24   19   16    8    9
+Nepesta             16.5   17.5   18.5 :  17   <5    7   <5   <5   <5
+Fowler              13.5   14.0   15.0 :   8   <5   <5   <5   <5   <5
+Rocky Ford          10.0   11.0   12.0 :  <5   <5   <5   <5   <5   <5
+La Junta            11.0   13.0   15.0 :  32   31    9   <5   <5   <5
+Lamar               11.0   13.0   15.0 :  <5   <5   <5   <5   <5   <5
+:Fountain Creek
+Colorado Springs    11.5   16.0   18.0 :  <5   <5   <5   <5   <5   <5
+Fountain            12.0   14.0   16.0 :   7   <5   <5   <5   <5   <5
+Pinon               12.0   14.0   15.0 :  <5   <5   <5   <5   <5   <5
+Pueblo              10.0   12.0   13.5 :  <5   <5   <5   <5   <5   <5
+:St. Charles River
+Vineland            12.0   15.0   18.0 :   7    7    5   <5   <5   <5
+:Purgatoire River
+Madrid               7.0    9.0   11.0 :  <5   <5   <5   <5   <5   <5
+Trinidad Lake       10.0   12.0   14.0 :  <5   <5   <5   <5   <5   <5
+Trinidad            11.0   12.0   13.0 :  <5   <5   <5   <5   <5   <5
+Las Animas           9.0   12.0   15.0 :   8   <5   <5   <5   <5   <5
+
+Legend
+CS = Conditional Simulation (Current Outlook)
+HS = Historical Simulation
+FT = Feet
+
+In Table 2 below...the 95 through 5 percent columns indicate the
+probability of exceeding the listed stage levels (FT) for the valid
+time period.
+
+...Table 2--Exceedance Probabilities...
+
+Chance of Exceeding Stages
+at Specific Locations
+Valid Period: 07/09/2020 - 10/07/2020
+Location              95%    90%    75%    50%    25%    10%     5%
+--------            ------ ------ ------ ------ ------ ------ ------
+:Arkansas River
+Leadville             5.3    5.3    5.3    5.4    5.5    5.7    5.7
+Salida                3.2    3.2    3.2    3.4    3.6    3.8    3.9
+Wellsville            4.0    4.0    4.1    4.4    4.6    4.8    5.1
+Parkdale              3.3    3.3    3.4    3.6    3.8    4.0    4.4
+Canon City            6.2    6.3    6.5    6.7    6.9    7.4    8.0
+Portland              2.6    2.6    2.9    3.2    3.6    4.4    5.3
+Pueblo                4.3    4.3    4.9    5.5    6.3    8.0    8.2
+Avondale              4.0    4.4    4.9    5.7    7.5    8.8    9.5
+Nepesta              13.9   14.0   14.4   14.7   15.9   17.2   17.8
+Fowler               11.6   11.6   11.8   12.0   12.6   13.3   14.0
+Rocky Ford            2.8    2.9    3.2    3.6    4.5    5.4    6.8
+La Junta              8.8    8.9    9.1    9.8   11.5   12.9   14.2
+Lamar                 8.0    8.1    8.5    8.7    8.9    9.6   10.1
+:Fountain Creek
+Colorado Springs      6.2    6.4    6.8    7.0    7.4    8.2    8.6
+Fountain              7.9    8.0    8.2    8.3    8.7   10.5   13.0
+Pinon                 5.5    5.7    5.9    6.1    6.5    7.5    8.6
+Pueblo                3.7    3.8    4.0    4.1    4.7    5.9    7.6
+:St. Charles River
+Vineland              3.2    3.3    3.5    4.3    5.3    8.1   15.6
+:Purgatoire River
+Madrid                3.2    3.3    3.4    3.6    3.7    3.9    4.3
+Trinidad Lake         4.8    4.8    5.3    6.1    6.8    7.6    7.9
+Trinidad              1.5    1.8    2.0    2.4    2.9    3.9    4.3
+Las Animas            3.3    3.5    4.0    5.5    7.4    8.7    9.9
+
+These long-range probabilistic outlooks contain forecast values that
+are calculated using multiple season scenarios from 30 or more years
+of climatological data...including current conditions of the
+river...soil moisture...snow cover...and 30 to 90 day long-range
+outlooks of temperature and precipitation. By providing a range of
+probabilities...the level of risk associated with long-range planning
+decisions can be determined. These probabilistic forecasts are part
+of the National Weather Service's Advanced Hydrologic Prediction
+Service.
+
+Visit our web site weather.gov/pub for more weather and water
+information.
+
+The next outlook will be issued July 23rd, 2020.
+
+$$
+
+
+
+
+
+
+
+
+
+2020-07-09 16:42:12.710 [INFO ] - The ID of the text product in /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt = 47a9525a06cce867a5659855ef2600fe51d4da78
+2020-07-09 16:42:12.710 [DEBUG] - Attempting to decode the header
+2020-07-09 16:42:12.712 [INFO ] - Unable to decode the text product in /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt (gov.noaa.nws.cap.exception.DecoderException: Probabilistic Hydrologic Outlook products aren't supported)
+2020-07-09 16:42:12.712 [INFO ] - Attempting to move /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt to /var/lib/caphandler/error/decode/awips/wmo/ESFPUB.09164211.443799.txt
+2020-07-09 16:42:12.717 [INFO ] - Moved /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt to /var/lib/caphandler/error/decode/awips/wmo/ESFPUB.09164211.443799.txt
+2020-07-09 16:42:18.238 [INFO ] - Attempting to read /var/lib/caphandler/input/awips/wmo/SPSMKX.TG.09164154.0.txt
+2020-07-09 16:42:18.240 [INFO ] - Read /var/lib/caphandler/input/awips/wmo/SPSMKX.TG.09164154.0.txt
+2020-07-09 16:42:18.240 [DEBUG] - The contents of /var/lib/caphandler/input/awips/wmo/SPSMKX.TG.09164154.0.txt:

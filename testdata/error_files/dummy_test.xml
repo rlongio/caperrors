@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><ns1:alerts xmlns:ns1="http://gov.fema.ipaws.services/feed"><alert xmlns="urn:oasis:names:tc:emergency:cap:1.2"><identifier>wea_003_imminent_threat_test12020624141331</identifier><sender>abc@def.com</sender><sent>2020-07-24T14:13:31-04:00</sent><status>Actual</status><msgType>Cancel</msgType><scope>Public</scope><code>IPAWSv1.0</code><references>abc@def.com,wea_003_imminent_threat_test1202062414111,2020-07-24T14:11:01-04:00</references><capsig:Signature xmlns:capsig="http://www.w3.org/2000/09/xmldsig#" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><capsig:SignedInfo><capsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><capsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><capsig:Reference URI=""><capsig:Transforms><capsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></capsig:Transforms><capsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><capsig:DigestValue>RGaH3gAyPV+PyjzRIgUGqFV+Jp/mYu//9qK6A7PlY2A=</capsig:DigestValue></capsig:Reference></capsig:SignedInfo><capsig:SignatureValue>BcZq8sB7T+4+toqC71fCz3kksxKz52Dm/9lJey/yBYsTGz4smQUdlE1tc69Kg4vYiajik7UIvPJ2
+T+c03tMxjWUwMU+DRFMD53GrwJzQ3Ywrhnp2gHpAGf9b1Gb+foBJeDw5adH5CdnAZX0u3g/cb1BF
+TMmb5CYCi7iygNcUPqP9pm1LSq/GkoFsNKYo/pT36NzHO0ac8o/f9o56YZ5I7suXYWJ5BcBuY+5h
+mzxl9geklcnQh25hByRDS75dNgISfQaYPGNhR3hGaEh51fihyCsAD3tlXhLoY3Mp+upFHDS1Rx98
+smqrouu4pePbAlC/OMDCDrZ4WGXUw+xl+BSwPw==</capsig:SignatureValue><capsig:KeyInfo><capsig:X509Data><capsig:X509SubjectName>CN=IPAWSOPEN120001,OU=A0141320000016B960E9BB80000097F,OU=Devices IPAWS,OU=National Continuity Programs,O=FEMA IPAWS,C=US</capsig:X509SubjectName><capsig:X509Certificate>MIIGXTCCBUWgAwIBAgIQQAFrlg6b1SfnTLZy4+Ik6DANBgkqhkiG9w0BAQsFADBuMQswCQYDVQQG
+EwJVUzEfMB0GA1UECgwWSWRlblRydXN0IFNlcnZpY2VzIExMQzEgMB4GA1UECwwXSWRlblRydXN0
+IEdsb2JhbCBDb21tb24xHDAaBgNVBAMME1BURSBJR0MgU2VydmVyIENBIDEwHhcNMTkwNjI2MjMx
+MTA4WhcNMjIwNjI1MjMxMTA4WjCBpTELMAkGA1UEBhMCVVMxEzARBgNVBAoTCkZFTUEgSVBBV1Mx
+JTAjBgNVBAsTHE5hdGlvbmFsIENvbnRpbnVpdHkgUHJvZ3JhbXMxFjAUBgNVBAsTDURldmljZXMg
+SVBBV1MxKDAmBgNVBAsTH0EwMTQxMzIwMDAwMDE2Qjk2MEU5QkI4MDAwMDA5N0YxGDAWBgNVBAMT
+D0lQQVdTT1BFTjEyMDAwMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAI96R+Zd5+gv
+qwjJH5LtV7I0rs/LN6efU8FuenOT43nw6nwXzjQag5RcGj73vKj5Dif/SHQjAa4tOYjGz0fLYu+w
+WTAD7TPWDHZGfP17uKRv/5ATxVBxX9+bCkTPD351JxJuSqTnvmg8YWBWailzVyrGGa3x6ScA7+35
+CGA3f3KeyohFZzRtAN8H5DXXnFmL2/KOGZS4t75qBeMFgCCOqB8zU41adtsGQ/nDKqG/9wM0j3JX
+PRz2YNIOVIQd78jaFQMn4MdnB+G37aFrDz2W12eUcVUwQXCByLEzM55/2k1mmFuPN0U0PYBPJbjt
+kWT1xMn1wkweCZd7ccSz4yHQgnMCAwEAAaOCAr0wggK5MA4GA1UdDwEB/wQEAwIFoDCBgQYIKwYB
+BQUHAQEEdTBzMC8GCCsGAQUFBzABhiNodHRwOi8vSUdDQ0ExUFRFLm9jc3AuaWRlbnRydXN0LmNv
+bTBABggrBgEFBQcwAoY0aHR0cDovL2FwcHMtc3RnLmlkZW50cnVzdC5jb20vcm9vdHMvaWdjc2Vy
+dmVyY2ExLnA3YzAfBgNVHSMEGDAWgBSc1H9L+MIO/N90WoUgnp8Zm7yF+zCCAVIGA1UdIASCAUkw
+ggFFMIIBQQYLYIZIAYb5LwBkJQEwggEwMEsGCCsGAQUFBwIBFj9odHRwczovL3NlY3VyZS5pZGVu
+dHJ1c3QuY29tL2NlcnRpZmljYXRlcy9wb2xpY3kvSUdDL2luZGV4Lmh0bWwwgeAGCCsGAQUFBwIC
+MIHTGoHQVGVzdCBDZXJ0aWZpY2F0ZS4gRG8gTm8gUmVseS4gQ2VydGlmaWNhdGUgdXNlIHJlc3Ry
+aWN0ZWQgdG8gUmVseWluZyBQYXJ0eShzKSBpbiBhY2NvcmRhbmNlIHdpdGggSUdDLUNQIChzZWUg
+aHR0cHM6Ly9zZWN1cmUuaWRlbnRydXN0LmNvbS9jZXJ0aWZpY2F0ZXMvcG9saWN5L0lHQy9pbmRl
+eC5odG1sKS4gSUdDLUNQUyBpbmNvcnBvcmF0ZWQgYnkgcmVmZXJlbmNlLjA+BgNVHR8ENzA1MDOg
+MaAvhi1odHRwOi8vY3JsLXB0ZS5pZGVudHJ1c3QuY29tL2lnY3NlcnZlcmNhMS5jcmwwGgYDVR0R
+BBMwEYIPSVBBV1NPUEVOMTIwMDAxMB0GA1UdDgQWBBRmoqQH5SFLnbwlP8Jpi1A/rUQP4jAxBgNV
+HSUEKjAoBggrBgEFBQcDAgYIKwYBBQUHAwUGCCsGAQUFBwMGBggrBgEFBQcDBzANBgkqhkiG9w0B
+AQsFAAOCAQEABZPaBtcqjogvAh0KZt1Vd3CF1YeGScLZ6PmVHrK3BB9hPMdbKPNRyFJcM3CW2qgj
+E2jkiDR0jnm90SorRnJJBQnkNxw0jtaE/HqPxtxxISJ7AbIwaWqNSA8SOHYaCJRAd3W+0XYfSrgg
+wKQi6IBbm5sZgusER6kkzZJEXW9HlAjjyM1sE2uLIvSovM7kdSU7LhopSspVwU88LFlZ9f5c/zQV
+bsrCY5weeJazNAWlJThMe/4uvj+WiMSi174r6TGR+lLOSxlvwWLb+vxzSrBRL0s4QhEKDjOGnk6s
+XipFUeJSHMS/vPOqUQ6hrsa5yishgK4RZwgTOMKUsoVlLHl4rg==</capsig:X509Certificate></capsig:X509Data></capsig:KeyInfo></capsig:Signature></alert></ns1:alerts>
