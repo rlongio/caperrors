@@ -7,7 +7,8 @@ import (
 	"time"
 
 	"noaa.gov/rlong/cap_errors/internal"
-	"noaa.gov/rlong/cap_errors/pkg"
+	filters "noaa.gov/rlong/cap_errors/pkg/filters"
+	product "noaa.gov/rlong/cap_errors/pkg/product"
 )
 
 func main() {
@@ -22,46 +23,31 @@ func main() {
 	fbefore := flag.String("before", "", "YYYY-MM-DD date that results must come before")
 	fafter := flag.String("after", "", "YYYY-MM-DD date that results must come after")
 
-	any := pkg.Any{
-		Values: toSlice(*finclude),
-	}
+	any := filters.NewAny(toSlice(*finclude))
+	none := filters.NewNone(toSlice(*fexclude))
+	before := filters.NewBefore(toDate(*fbefore))
+	after := filters.NewAfter(toDate(*fafter))
+	extensions := filters.NewAny([]string{
+		".txt",
+		".xml",
+	})
 
-	none := pkg.None{
-		Values: toSlice(*fexclude),
-	}
-
-	b, err := toDate(*fbefore)
-	if err != nil {
-		panic(err)
-	}
-	before := pkg.Before{
-		Value: b,
-	}
-
-	a, err := toDate(*fafter)
-	if err != nil {
-		panic(err)
-	}
-	after := pkg.After{
-		Value: a,
-	}
-
-	filters := []pkg.Filterer{
-		any,
-		none,
-		before,
-		after,
-	}
+	filter := filters.NewFilter()
+	filter.Add(any)
+	filter.Add(none)
+	filter.Add(before)
+	filter.Add(after)
+	filter.Add(extensions)
 
 	flag.Parse()
 
 	filePaths = append(filePaths, *searchPath)
 
 	var wg sync.WaitGroup
-	var fx = pkg.Product.Print
+	var fx = product.Product.Print
 
-	ch := make(chan pkg.File)
-	p := internal.GetFilteredProductFilesFromDirectoriesRecursively(filePaths, filters)
+	ch := make(chan product.File)
+	p := internal.ProductFilesFromDirectoriesRecursively(filePaths, filter)
 
 	for i := 1; i <= 5; i++ { // worker goroutines
 		go worker(fx, *logFilePath, ch, &wg)
@@ -74,24 +60,29 @@ func main() {
 	close(ch)
 }
 
-func worker(fx pkg.Process, logFilePath string, cs chan pkg.File, wg *sync.WaitGroup) {
+// worker creates a product from a file and logfile
+func worker(fx product.Process, logFilePath string, cs chan product.File, wg *sync.WaitGroup) {
 	for i := range cs {
-		fx(pkg.CreateProduct(i, logFilePath))
+		fx(product.CreateProduct(i, logFilePath))
 		wg.Done()
 	}
 }
 
+// toSlice converts string to a slice using "," as delimiter
 func toSlice(value string) []string {
 	return strings.Split(value, ", ")
 }
 
-// DateStringToDate takes a date string in the form of YYYY-MM-DD and
+// toDate takes a date string in the form of YYYY-MM-DD and
 // returns a time.Time instnace
-func toDate(date string) (t time.Time, err error) {
+func toDate(date string) (t time.Time) {
 	if date == "" {
-		return time.Time{}, err
+		return time.Time{}
 	}
 	layout := "2006-01-02"
-	t, err = time.ParseInLocation(layout, date, time.Local)
-	return
+	t, err := time.ParseInLocation(layout, date, time.Local)
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
