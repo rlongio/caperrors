@@ -1,7 +1,6 @@
 package filters
 
 import (
-	"fmt"
 	"os"
 	"strings"
 )
@@ -13,12 +12,11 @@ type Any struct {
 
 // IsOK returns true if the value is in Any
 func (a Any) IsOK(file os.FileInfo) bool {
-	if (len(a.values)) <= 1 {
+	if (len(a.values)) == 0 {
 		return true
 	}
 	for _, needle := range a.values {
 		if strings.Contains(absFilePath(file), needle) {
-			fmt.Println(absFilePath(file))
 			return true
 		}
 	}

@@ -12,7 +12,7 @@ type None struct {
 
 // IsOK returns true if the value is not in None
 func (n None) IsOK(file os.FileInfo) bool {
-	if (len(n.values)) <= 1 {
+	if (len(n.values)) == 0 {
 		return true
 	}
 	for _, needle := range n.values {
