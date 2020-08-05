@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	filters "noaa.gov/rlong/cap_errors/pkg/filters"
-	product "noaa.gov/rlong/cap_errors/pkg/product"
+	filters "github.com/SaltyCatFish/caperrors/pkg/filters"
+	product "github.com/SaltyCatFish/caperrors/pkg/product"
 )
 
 // ProductFilesFromDirectoriesRecursively returns all files from

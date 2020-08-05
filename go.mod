@@ -1,3 +1,3 @@
-module noaa.gov/rlong/cap_errors
+module github.com/SaltyCatFish/caperrors
 
 go 1.14

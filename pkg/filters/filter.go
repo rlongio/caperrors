@@ -1,3 +1,4 @@
+// Package filters provides ways of filtering files.
 package filters
 
 import (

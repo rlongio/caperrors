@@ -1,3 +1,4 @@
+// Package product contains tools for creating and working on NOAA products.
 package product
 
 import (
