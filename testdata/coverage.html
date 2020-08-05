@@ -54,15 +54,15 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">noaa.gov/rlong/cap_errors/pkg/filters/after.go (100.0%)</option>
+				<option value="file0">github.com/SaltyCatFish/caperrors/pkg/filters/after.go (100.0%)</option>
 				
-				<option value="file1">noaa.gov/rlong/cap_errors/pkg/filters/any.go (100.0%)</option>
+				<option value="file1">github.com/SaltyCatFish/caperrors/pkg/filters/any.go (100.0%)</option>
 				
-				<option value="file2">noaa.gov/rlong/cap_errors/pkg/filters/before.go (100.0%)</option>
+				<option value="file2">github.com/SaltyCatFish/caperrors/pkg/filters/before.go (100.0%)</option>
 				
-				<option value="file3">noaa.gov/rlong/cap_errors/pkg/filters/filter.go (25.0%)</option>
+				<option value="file3">github.com/SaltyCatFish/caperrors/pkg/filters/filter.go (100.0%)</option>
 				
-				<option value="file4">noaa.gov/rlong/cap_errors/pkg/filters/none.go (100.0%)</option>
+				<option value="file4">github.com/SaltyCatFish/caperrors/pkg/filters/none.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -165,7 +165,8 @@ func NewBefore(value time.Time) Before <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file3" style="display: none">package filters
+		<pre class="file" id="file3" style="display: none">// Package filters provides ways of filtering files.
+package filters
 
 import (
         "os"
@@ -178,22 +179,22 @@ type Filter struct {
 }
 
 // Add adds a Filterer to Filter
-func (f *Filter) Add(filter Filterer) <span class="cov0" title="0">{
+func (f *Filter) Add(filter Filterer) <span class="cov8" title="1">{
         f.filters = append(f.filters, filter)
 }</span>
 
 // IsOK returns true if all Filterers IsOK's return true
-func (f Filter) IsOK(file os.FileInfo) bool <span class="cov0" title="0">{
-        for _, f := range f.filters </span><span class="cov0" title="0">{
-                if !f.IsOK(file) </span><span class="cov0" title="0">{
+func (f Filter) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
+        for _, f := range f.filters </span><span class="cov8" title="1">{
+                if !f.IsOK(file) </span><span class="cov8" title="1">{
                         return false
                 }</span>
         }
-        <span class="cov0" title="0">return true</span>
+        <span class="cov8" title="1">return true</span>
 }
 
 // NewFilter returns a new instance of Filter
-func NewFilter() Filter <span class="cov0" title="0">{
+func NewFilter() Filter <span class="cov8" title="1">{
         return Filter{}
 }</span>
 

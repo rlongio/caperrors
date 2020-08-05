@@ -1,51 +1,66 @@
 package filters
 
 import (
-	"os"
-	"time"
+	"testing"
 )
 
-type FileInfoMock struct {
-	name    string
-	size    int64
-	mode    os.FileMode
-	modtime time.Time
-	isDir   bool
-	sys     interface{}
+type addResult struct {
+	filter   Filterer
+	qty      int
+	expected bool
 }
 
-func (f FileInfoMock) Name() string {
-	return f.name
+var addResults = []addResult{
+	{qty: 2},
+	{qty: 10},
+	{qty: 100},
+	{qty: 1000},
+	{qty: 0},
 }
 
-func (f FileInfoMock) Size() int64 {
-	return f.size
-}
+func TestAdd(t *testing.T) {
+	for _, test := range addResults {
+		filter := NewFilter()
+		mockFilterer := NewMockFilter(true)
+		for i := 1; i <= test.qty; i++ {
+			filter.Add(mockFilterer)
+		}
 
-func (f FileInfoMock) Mode() os.FileMode {
-	return f.mode
-}
-
-func (f FileInfoMock) ModTime() time.Time {
-	return f.modtime
-}
-
-func (f FileInfoMock) IsDir() bool {
-	return f.isDir
-}
-
-func (f FileInfoMock) Sys() interface{} {
-	return f.sys
-}
-
-func NewModTimeMock(time time.Time) FileInfoMock {
-	return FileInfoMock{
-		modtime: time,
+		if len(filter.filters) != test.qty {
+			t.Fatalf("%v does not equal %v", len(filter.filters), test.qty)
+		}
 	}
 }
 
-func NewModNameMock(name string) FileInfoMock {
-	return FileInfoMock{
-		name: name,
+type isOKResult struct {
+	results  []bool
+	expected bool
+}
+
+var isOKResults = []isOKResult{
+	{
+		results:  []bool{true, true, true},
+		expected: true,
+	},
+	{
+		results:  []bool{false, false, false},
+		expected: false,
+	},
+	{
+		results:  []bool{false, true, true},
+		expected: false,
+	},
+}
+
+func TestIsOK(t *testing.T) {
+	for _, test := range isOKResults {
+		filter := NewFilter()
+		for _, result := range test.results {
+			filter.Add(NewMockFilter(result))
+		}
+
+		if filter.IsOK(nil) != test.expected {
+			t.Errorf("%v does not equal %v", filter.IsOK(nil), test.expected)
+		}
 	}
 }
