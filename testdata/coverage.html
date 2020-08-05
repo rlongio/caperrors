@@ -64,6 +64,12 @@
 				
 				<option value="file4">github.com/SaltyCatFish/caperrors/pkg/filters/none.go (100.0%)</option>
 				
+				<option value="file5">github.com/SaltyCatFish/caperrors/pkg/product/file.go (0.0%)</option>
+				
+				<option value="file6">github.com/SaltyCatFish/caperrors/pkg/product/process.go (0.0%)</option>
+				
+				<option value="file7">github.com/SaltyCatFish/caperrors/pkg/product/product.go (100.0%)</option>
+				
 				</select>
 			</div>
 			<div id="legend">
@@ -234,6 +240,210 @@ func (n None) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
 func NewNone(values []string) None <span class="cov8" title="1">{
         return None{
                 values: values,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package product
+
+import (
+        "bufio"
+        "encoding/xml"
+        "fmt"
+        "io/ioutil"
+        "os"
+        "path/filepath"
+        "regexp"
+        "strings"
+)
+
+// Filer contains methods to retrieve a product ID and error message from a log file
+type Filer interface {
+        ID(string) (string, error)
+        ErrorMessage(string) (string, error)
+}
+
+// File represents a file that contains product information
+type File struct {
+        path string
+        file os.FileInfo
+}
+
+// NewFile returns a new instance of File
+func NewFile(path string, file os.FileInfo) File <span class="cov0" title="0">{
+        return File{
+                path: path,
+                file: file,
+        }
+}</span>
+
+// ID retrieves the product ID from either a .txt or .xml file
+func (f File) ID(logFilePath string) (id string, err error) <span class="cov0" title="0">{
+        if f.hasExtension(".txt") </span><span class="cov0" title="0">{
+                id, err = f.idFromTextFile(logFilePath)
+                return
+        }</span>
+        <span class="cov0" title="0">if f.hasExtension(".xml") </span><span class="cov0" title="0">{
+                id, err = f.idFromXMLFile(logFilePath)
+                return
+        }</span>
+        <span class="cov0" title="0">return "", fmt.Errorf("Unknown file extension: %v", f.base())</span>
+}
+
+// ErrorMessage returns the error information found for the product in logFilePath
+func (f File) ErrorMessage(logFilePath string) (message string, err error) <span class="cov0" title="0">{
+
+        regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.base())
+        regex := regexp.MustCompile(regexSearchString)
+
+        logFile, err := os.Open(logFilePath)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">defer logFile.Close()
+
+        previousLine := ""
+        scanner := bufio.NewScanner(logFile)
+        for scanner.Scan() </span><span class="cov0" title="0">{
+                if regex.FindString(scanner.Text()) != "" </span><span class="cov0" title="0">{
+                        message = previousLine
+                        return
+                }</span>
+                <span class="cov0" title="0">previousLine = scanner.Text()</span>
+        }
+        <span class="cov0" title="0">err = scanner.Err()
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">return</span>
+}
+
+// Ext returns the file extension
+func (f File) ext() string <span class="cov0" title="0">{
+        return filepath.Ext(f.abspath())
+}</span>
+
+// abspath returns the relative filepath and name
+func (f File) abspath() (path string) <span class="cov0" title="0">{
+        return filepath.Join(f.path, f.file.Name())
+}</span>
+
+// base returns the name of the file without the path
+func (f File) base() string <span class="cov0" title="0">{
+        return f.file.Name()
+}</span>
+
+// idFromTextFile returns the matching id for product in logFilePath
+func (f File) idFromTextFile(logFilePath string) (id string, err error) <span class="cov0" title="0">{
+        regex := regexp.MustCompile(`(=\s)(.*$)`)
+
+        logFile, err := os.Open(logFilePath)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">defer logFile.Close()
+
+        scanner := bufio.NewScanner(logFile)
+        for scanner.Scan() </span><span class="cov0" title="0">{
+                if strings.Contains(scanner.Text(), f.base()) &amp;&amp; strings.Contains(scanner.Text(), "The ID of the text product in") </span><span class="cov0" title="0">{
+                        return regex.FindStringSubmatch(scanner.Text())[2], err
+                }</span>
+        }
+        <span class="cov0" title="0">err = scanner.Err()
+        return "not found", err</span>
+}
+
+// idFromXMLFile returns product ID parsed from the XML file
+func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span class="cov0" title="0">{
+        id = "not found"
+        file, err := os.Open(f.abspath())
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">content, err := ioutil.ReadAll(file)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">defer file.Close()
+
+        var identifier struct {
+                XMLName xml.Name `xml:"alerts"`
+                ID      string   `xml:"alert&gt;identifier"`
+        }
+
+        err = xml.Unmarshal([]byte(content), &amp;identifier)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+        <span class="cov0" title="0">id = identifier.ID
+        return</span>
+}
+
+// hasExtension returns true if the file has the passes extension in its path
+// false otherwise
+func (f File) hasExtension(extension string) bool <span class="cov0" title="0">{
+        if strings.ToLower(f.ext()) == strings.ToLower(extension) </span><span class="cov0" title="0">{
+                return true
+        }</span>
+        <span class="cov0" title="0">return false</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package product
+
+import "fmt"
+
+// Process is a function that operates on a product
+type Process func(Product)
+
+// Print print the product to stdout
+func (p Product) Print() <span class="cov0" title="0">{
+        j, err := p.JSON()
+        if err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+        <span class="cov0" title="0">fmt.Println(string(j))</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">// Package product contains tools for creating and working on NOAA products.
+package product
+
+import (
+        "encoding/json"
+)
+
+// Product represents an alert product
+type Product struct {
+        ID      string `json:"id"`
+        Message string `json:"message"`
+}
+
+// JSON returns the JSON form of Product
+func (p Product) JSON() (j string, err error) <span class="cov8" title="1">{
+        result, _ := json.Marshal(p)
+        j = string(result)
+        return
+}</span>
+
+// CreateProduct creates a product type from a ProductFile
+func CreateProduct(file Filer, logFilePath string) (product Product) <span class="cov8" title="1">{
+        id, err := file.ID(logFilePath)
+        if err != nil </span><span class="cov8" title="1">{
+                id = err.Error()
+        }</span>
+        <span class="cov8" title="1">message, err := file.ErrorMessage(logFilePath)
+        if err != nil </span><span class="cov8" title="1">{
+                message = err.Error()
+        }</span>
+        <span class="cov8" title="1">return NewProduct(id, message)</span>
+}
+
+// NewProduct returns a new instance of Product
+func NewProduct(ID string, message string) Product <span class="cov8" title="1">{
+        return Product{
+                ID:      ID,
+                Message: message,
         }
 }</span>
 </pre>

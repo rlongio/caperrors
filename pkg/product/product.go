@@ -11,21 +11,22 @@ type Product struct {
 	Message string `json:"message"`
 }
 
-// ToJSON returns the JSON form of Product
-func (p Product) ToJSON() (j []byte, err error) {
-	j, err = json.Marshal(p)
+// JSON returns the JSON form of Product
+func (p Product) JSON() (j string, err error) {
+	result, _ := json.Marshal(p)
+	j = string(result)
 	return
 }
 
 // CreateProduct creates a product type from a ProductFile
-func CreateProduct(file File, logFilePath string) (product Product) {
+func CreateProduct(file Filer, logFilePath string) (product Product) {
 	id, err := file.ID(logFilePath)
 	if err != nil {
-		return
+		id = err.Error()
 	}
 	message, err := file.ErrorMessage(logFilePath)
 	if err != nil {
-		return
+		message = err.Error()
 	}
 	return NewProduct(id, message)
 }
