@@ -62,6 +62,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestIDAndMessage(t *testing.T) {
+	fmt.Println(os.Getwd())
 	for _, test := range fileResults {
 		file, err := os.Open(filepath.Join(test.filePath, test.fileBase))
 		defer file.Close()
