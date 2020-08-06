@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -49,10 +50,19 @@ var fileResults = []FileResult{
 	},
 }
 
+func TestMain(m *testing.M) {
+	fmt.Println("doing setup")
+	setup("../../testdata/files")
+	fmt.Println("finish setup")
+	code := m.Run()
+	fmt.Println("doing teardown")
+	teardown("../../testdata/files")
+	fmt.Println("finish teardown")
+	os.Exit(code)
+}
+
 func TestIDAndMessage(t *testing.T) {
 	for _, test := range fileResults {
-		setup(test)
-		defer teardown(test)
 		file, err := os.Open(filepath.Join(test.filePath, test.fileBase))
 		defer file.Close()
 		if err != nil {
@@ -72,13 +82,24 @@ func TestIDAndMessage(t *testing.T) {
 	}
 }
 
-func setup(t FileResult) {
-	fmt.Println("Running setup")
-	for _, path := range t.paths() {
-		fmt.Println(path)
-		fmt.Println(os.Getwd())
-		name := path + ".gz"
-		reader, err := ioutil.ReadFile(name)
+func setup(path string) {
+	results := []string{}
+	filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
+		if err != nil {
+			log.Fatalln(err)
+			return nil
+		}
+		if !file.IsDir() && filepath.Ext(path) == ".gz" {
+			results = append(results, path)
+		}
+		return nil
+	})
+	gunzip(results)
+}
+
+func gunzip(paths []string) {
+	for _, path := range paths {
+		reader, err := ioutil.ReadFile(path)
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
@@ -91,20 +112,23 @@ func setup(t FileResult) {
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
-		err = ioutil.WriteFile(path, data, 644)
+		err = ioutil.WriteFile(strings.TrimSuffix(path, filepath.Ext(path)), data, 644)
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
 	}
-	fmt.Println("Setup completed")
 	return
 }
 
-func teardown(t FileResult) {
-	fmt.Println("Running teardown")
-	for _, path := range t.paths() {
-		os.Remove(path)
-	}
-	fmt.Println("Teardown completed")
-	return
+func teardown(path string) {
+	filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
+		if err != nil {
+			log.Fatalln(err)
+			return nil
+		}
+		if !file.IsDir() && filepath.Ext(path) != ".gz" {
+			os.RemoveAll(path)
+		}
+		return nil
+	})
 }
