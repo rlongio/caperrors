@@ -54,6 +54,7 @@ func TestMain(m *testing.M) {
 	fmt.Println("doing setup")
 	setup("../../testdata/files")
 	fmt.Println("finish setup")
+	fmt.Println(os.Getwd())
 	code := m.Run()
 	fmt.Println("doing teardown")
 	teardown("../../testdata/files")
