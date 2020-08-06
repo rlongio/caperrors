@@ -73,7 +73,10 @@ func TestIDAndMessage(t *testing.T) {
 }
 
 func setup(t FileResult) {
+	fmt.Println("Running setup")
 	for _, path := range t.paths() {
+		fmt.Println(path)
+		fmt.Println(os.Getwd())
 		name := path + ".gz"
 		reader, err := ioutil.ReadFile(name)
 		if err != nil {
@@ -93,12 +96,15 @@ func setup(t FileResult) {
 			panic(fmt.Errorf(err.Error()))
 		}
 	}
+	fmt.Println("Setup completed")
 	return
 }
 
 func teardown(t FileResult) {
+	fmt.Println("Running teardown")
 	for _, path := range t.paths() {
 		os.Remove(path)
 	}
+	fmt.Println("Teardown completed")
 	return
 }
