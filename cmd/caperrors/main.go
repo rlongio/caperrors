@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"strings"
 	"sync"
 	"time"
@@ -55,6 +56,7 @@ func main() {
 	}
 	for _, productFile := range p {
 		wg.Add(1)
+		log.Printf("Checking %v", productFile)
 		ch <- productFile
 	}
 	wg.Wait()
