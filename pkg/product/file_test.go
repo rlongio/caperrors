@@ -93,10 +93,12 @@ func setup(t FileResult) {
 			panic(fmt.Errorf(err.Error()))
 		}
 	}
+	return
 }
 
 func teardown(t FileResult) {
 	for _, path := range t.paths() {
 		os.Remove(path)
 	}
+	return
 }
