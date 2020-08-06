@@ -114,6 +114,7 @@ func gunzip(paths []string) {
 			panic(fmt.Errorf(err.Error()))
 		}
 		err = ioutil.WriteFile(strings.TrimSuffix(path, filepath.Ext(path)), data, 644)
+		fmt.Println(fmt.Sprintf("Writing to %v", strings.TrimSuffix(path, filepath.Ext(path))))
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
