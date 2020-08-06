@@ -12,10 +12,9 @@ type Product struct {
 }
 
 // JSON returns the JSON form of Product
-func (p Product) JSON() (j string, err error) {
+func (p Product) JSON() string {
 	result, _ := json.Marshal(p)
-	j = string(result)
-	return
+	return string(result)
 }
 
 // CreateProduct creates a product type from a ProductFile

@@ -64,7 +64,7 @@
 				
 				<option value="file4">github.com/SaltyCatFish/caperrors/pkg/filters/none.go (100.0%)</option>
 				
-				<option value="file5">github.com/SaltyCatFish/caperrors/pkg/product/file.go (0.0%)</option>
+				<option value="file5">github.com/SaltyCatFish/caperrors/pkg/product/file.go (83.9%)</option>
 				
 				<option value="file6">github.com/SaltyCatFish/caperrors/pkg/product/process.go (0.0%)</option>
 				
@@ -270,7 +270,7 @@ type File struct {
 }
 
 // NewFile returns a new instance of File
-func NewFile(path string, file os.FileInfo) File <span class="cov0" title="0">{
+func NewFile(path string, file os.FileInfo) File <span class="cov8" title="1">{
         return File{
                 path: path,
                 file: file,
@@ -278,12 +278,12 @@ func NewFile(path string, file os.FileInfo) File <span class="cov0" title="0">{
 }</span>
 
 // ID retrieves the product ID from either a .txt or .xml file
-func (f File) ID(logFilePath string) (id string, err error) <span class="cov0" title="0">{
-        if f.hasExtension(".txt") </span><span class="cov0" title="0">{
+func (f File) ID(logFilePath string) (id string, err error) <span class="cov8" title="1">{
+        if f.hasExtension(".txt") </span><span class="cov8" title="1">{
                 id, err = f.idFromTextFile(logFilePath)
                 return
         }</span>
-        <span class="cov0" title="0">if f.hasExtension(".xml") </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if f.hasExtension(".xml") </span><span class="cov8" title="1">{
                 id, err = f.idFromXMLFile(logFilePath)
                 return
         }</span>
@@ -291,7 +291,7 @@ func (f File) ID(logFilePath string) (id string, err error) <span class="cov0" t
 }
 
 // ErrorMessage returns the error information found for the product in logFilePath
-func (f File) ErrorMessage(logFilePath string) (message string, err error) <span class="cov0" title="0">{
+func (f File) ErrorMessage(logFilePath string) (message string, err error) <span class="cov8" title="1">{
 
         regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.base())
         regex := regexp.MustCompile(regexSearchString)
@@ -300,52 +300,52 @@ func (f File) ErrorMessage(logFilePath string) (message string, err error) <span
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">defer logFile.Close()
+        <span class="cov8" title="1">defer logFile.Close()
 
         previousLine := ""
         scanner := bufio.NewScanner(logFile)
-        for scanner.Scan() </span><span class="cov0" title="0">{
-                if regex.FindString(scanner.Text()) != "" </span><span class="cov0" title="0">{
+        for scanner.Scan() </span><span class="cov8" title="1">{
+                if regex.FindString(scanner.Text()) != "" </span><span class="cov8" title="1">{
                         message = previousLine
                         return
                 }</span>
-                <span class="cov0" title="0">previousLine = scanner.Text()</span>
+                <span class="cov8" title="1">previousLine = scanner.Text()</span>
         }
-        <span class="cov0" title="0">err = scanner.Err()
+        <span class="cov8" title="1">err = scanner.Err()
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">return</span>
+        <span class="cov8" title="1">return</span>
 }
 
 // Ext returns the file extension
-func (f File) ext() string <span class="cov0" title="0">{
+func (f File) ext() string <span class="cov8" title="1">{
         return filepath.Ext(f.abspath())
 }</span>
 
 // abspath returns the relative filepath and name
-func (f File) abspath() (path string) <span class="cov0" title="0">{
+func (f File) abspath() (path string) <span class="cov8" title="1">{
         return filepath.Join(f.path, f.file.Name())
 }</span>
 
 // base returns the name of the file without the path
-func (f File) base() string <span class="cov0" title="0">{
+func (f File) base() string <span class="cov8" title="1">{
         return f.file.Name()
 }</span>
 
 // idFromTextFile returns the matching id for product in logFilePath
-func (f File) idFromTextFile(logFilePath string) (id string, err error) <span class="cov0" title="0">{
+func (f File) idFromTextFile(logFilePath string) (id string, err error) <span class="cov8" title="1">{
         regex := regexp.MustCompile(`(=\s)(.*$)`)
 
         logFile, err := os.Open(logFilePath)
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">defer logFile.Close()
+        <span class="cov8" title="1">defer logFile.Close()
 
         scanner := bufio.NewScanner(logFile)
-        for scanner.Scan() </span><span class="cov0" title="0">{
-                if strings.Contains(scanner.Text(), f.base()) &amp;&amp; strings.Contains(scanner.Text(), "The ID of the text product in") </span><span class="cov0" title="0">{
+        for scanner.Scan() </span><span class="cov8" title="1">{
+                if strings.Contains(scanner.Text(), f.base()) &amp;&amp; strings.Contains(scanner.Text(), "The ID of the text product in") </span><span class="cov8" title="1">{
                         return regex.FindStringSubmatch(scanner.Text())[2], err
                 }</span>
         }
@@ -354,17 +354,17 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) <span cl
 }
 
 // idFromXMLFile returns product ID parsed from the XML file
-func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span class="cov0" title="0">{
+func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span class="cov8" title="1">{
         id = "not found"
         file, err := os.Open(f.abspath())
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">content, err := ioutil.ReadAll(file)
+        <span class="cov8" title="1">content, err := ioutil.ReadAll(file)
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">defer file.Close()
+        <span class="cov8" title="1">defer file.Close()
 
         var identifier struct {
                 XMLName xml.Name `xml:"alerts"`
@@ -375,17 +375,17 @@ func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span cla
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
-        <span class="cov0" title="0">id = identifier.ID
+        <span class="cov8" title="1">id = identifier.ID
         return</span>
 }
 
 // hasExtension returns true if the file has the passes extension in its path
 // false otherwise
-func (f File) hasExtension(extension string) bool <span class="cov0" title="0">{
-        if strings.ToLower(f.ext()) == strings.ToLower(extension) </span><span class="cov0" title="0">{
+func (f File) hasExtension(extension string) bool <span class="cov8" title="1">{
+        if strings.ToLower(f.ext()) == strings.ToLower(extension) </span><span class="cov8" title="1">{
                 return true
         }</span>
-        <span class="cov0" title="0">return false</span>
+        <span class="cov8" title="1">return false</span>
 }
 </pre>
 		
@@ -396,14 +396,10 @@ import "fmt"
 // Process is a function that operates on a product
 type Process func(Product)
 
-// Print print the product to stdout
+// Print prints the product json to stdout
 func (p Product) Print() <span class="cov0" title="0">{
-        j, err := p.JSON()
-        if err != nil </span><span class="cov0" title="0">{
-                panic(err)</span>
-        }
-        <span class="cov0" title="0">fmt.Println(string(j))</span>
-}
+        fmt.Println(string(p.JSON()))
+}</span>
 </pre>
 		
 		<pre class="file" id="file7" style="display: none">// Package product contains tools for creating and working on NOAA products.
@@ -420,10 +416,9 @@ type Product struct {
 }
 
 // JSON returns the JSON form of Product
-func (p Product) JSON() (j string, err error) <span class="cov8" title="1">{
+func (p Product) JSON() string <span class="cov8" title="1">{
         result, _ := json.Marshal(p)
-        j = string(result)
-        return
+        return string(result)
 }</span>
 
 // CreateProduct creates a product type from a ProductFile

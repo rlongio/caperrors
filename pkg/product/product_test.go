@@ -8,7 +8,7 @@ import (
 func TestJSON(t *testing.T) {
 	expected := "{\"id\":\"0000\",\"message\":\"Error Message\"}"
 	product := NewProduct("0000", "Error Message")
-	if result, _ := product.JSON(); result != expected {
+	if result := product.JSON(); result != expected {
 		t.Errorf("%v does not equal %v", result, expected)
 	}
 }
