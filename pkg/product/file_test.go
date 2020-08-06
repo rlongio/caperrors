@@ -68,6 +68,7 @@ func TestIDAndMessage(t *testing.T) {
 		file, err := os.Open(filepath.Join(test.filePath, test.fileBase))
 		defer file.Close()
 		if err != nil {
+			t.Logf(err.Error())
 			t.Fatalf("Could not open %v", filepath.Join(test.filePath, test.fileBase))
 		}
 		fileinfo, err := file.Stat()
@@ -115,7 +116,7 @@ func gunzip(paths []string) {
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
-		err = ioutil.WriteFile(strings.TrimSuffix(path, filepath.Ext(path)), data, 644)
+		err = ioutil.WriteFile(strings.TrimSuffix(path, filepath.Ext(path)), data, 777)
 		wd, _ := os.Getwd()
 		fmt.Println(fmt.Sprintf("Writing to %v", filepath.Join(wd, strings.TrimSuffix(path, filepath.Ext(path)))))
 		if err != nil {
