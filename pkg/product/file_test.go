@@ -51,24 +51,17 @@ var fileResults = []FileResult{
 }
 
 func TestMain(m *testing.M) {
-	fmt.Println("doing setup")
 	setup("../../testdata/files")
-	fmt.Println("finish setup")
-	fmt.Println(os.Getwd())
 	code := m.Run()
-	fmt.Println("doing teardown")
 	teardown("../../testdata/files")
-	fmt.Println("finish teardown")
 	os.Exit(code)
 }
 
 func TestIDAndMessage(t *testing.T) {
-	fmt.Println(os.Getwd())
 	for _, test := range fileResults {
 		file, err := os.Open(filepath.Join(test.filePath, test.fileBase))
 		defer file.Close()
 		if err != nil {
-			t.Logf(err.Error())
 			t.Fatalf("Could not open %v", filepath.Join(test.filePath, test.fileBase))
 		}
 		fileinfo, err := file.Stat()
@@ -92,7 +85,6 @@ func setup(path string) {
 			log.Fatalln(err)
 			return nil
 		}
-		fmt.Println(path)
 		if !file.IsDir() && filepath.Ext(path) == ".gz" {
 			results = append(results, path)
 		}
@@ -117,8 +109,6 @@ func gunzip(paths []string) {
 			panic(fmt.Errorf(err.Error()))
 		}
 		err = ioutil.WriteFile(strings.TrimSuffix(path, filepath.Ext(path)), data, 777)
-		wd, _ := os.Getwd()
-		fmt.Println(fmt.Sprintf("Writing to %v", filepath.Join(wd, strings.TrimSuffix(path, filepath.Ext(path)))))
 		if err != nil {
 			panic(fmt.Errorf(err.Error()))
 		}
