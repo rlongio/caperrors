@@ -12,6 +12,7 @@ import (
 // ProductFilesFromDirectoriesRecursively returns all files from
 // a directory recursively and reports the filtered results.
 func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filter) (files []product.File) {
+	log.Printf("Checking %v", paths)
 	for _, path := range paths {
 		filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
 			if err != nil {
