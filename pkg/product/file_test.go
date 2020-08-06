@@ -90,6 +90,7 @@ func setup(path string) {
 			log.Fatalln(err)
 			return nil
 		}
+		fmt.Println(path)
 		if !file.IsDir() && filepath.Ext(path) == ".gz" {
 			results = append(results, path)
 		}
