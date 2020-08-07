@@ -25,6 +25,8 @@ func main() {
 	fbefore := flag.String("before", "", "YYYY-MM-DD date that results must come before")
 	fafter := flag.String("after", "", "YYYY-MM-DD date that results must come after")
 
+	flag.Parse()
+
 	any := filters.NewAny(toSlice(*finclude))
 	none := filters.NewNone(toSlice(*fexclude))
 	before := filters.NewBefore(toDate(*fbefore))
@@ -33,6 +35,9 @@ func main() {
 		".txt",
 		".xml",
 	})
+	noextensions := filters.NewNone([]string{ //TODO Dev only, prevents from including gz files
+		".gz",
+	})
 
 	filter := filters.NewFilter()
 	filter.Add(any)
@@ -40,8 +45,7 @@ func main() {
 	filter.Add(before)
 	filter.Add(after)
 	filter.Add(extensions)
-
-	flag.Parse()
+	filter.Add(noextensions)
 
 	filePaths = append(filePaths, *searchPath)
 
@@ -58,7 +62,6 @@ func main() {
 	}
 	for _, productFile := range p {
 		wg.Add(1)
-		log.Printf("checking %v", productFile)
 		ch <- productFile
 	}
 	wg.Wait()

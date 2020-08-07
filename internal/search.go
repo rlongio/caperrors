@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,27 +13,26 @@ import (
 // a directory recursively and reports the filtered results.
 func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filter) (files []product.File) {
 	for _, path := range paths {
-		fmt.Printf("filter: %v", filter)
-		filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
+		err := filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
 			if err != nil {
 				log.Fatalln(err)
-				return nil
+				return filepath.SkipDir
 			}
-			if file.IsDir() {
-				return nil
+			if !file.IsDir() && filter.IsOK(file) {
+				absdir, err := absdir(path, file)
+				if err != nil {
+					log.Printf("ERROR: %v", err)
+					return err
+				}
+				f := product.NewFile(absdir, file)
+				log.Printf("Appending %v", filepath.Join(absdir, file.Name()))
+				files = append(files, f)
 			}
-			if !filter.IsOK(file) {
-				return nil
-			}
-			absdir, err := absdir(path, file)
-			if err != nil {
-				log.Println(err)
-				return nil
-			}
-			f := product.NewFile(absdir, file)
-			files = append(files, f)
 			return nil
 		})
+		if err != nil {
+			log.Printf(err.Error())
+		}
 	}
 	return
 }

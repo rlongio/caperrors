@@ -2,7 +2,6 @@
 package filters
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -21,7 +20,6 @@ func (f *Filter) Add(filter Filterer) {
 func (f Filter) IsOK(file os.FileInfo) bool {
 	for _, f := range f.filters {
 		if !f.IsOK(file) {
-			log.Printf("Filter not OK: %v", f)
 			return false
 		}
 	}
