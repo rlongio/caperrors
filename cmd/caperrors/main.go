@@ -49,17 +49,20 @@ func main() {
 	var fx = product.Product.Print
 
 	ch := make(chan product.File)
+	log.Printf("gathering product files..")
 	p := internal.ProductFilesFromDirectoriesRecursively(filePaths, filter)
+	log.Printf("found %v product files", len(p))
 
 	for i := 1; i <= 5; i++ { // worker goroutines
 		go worker(fx, *logFilePath, ch, &wg)
 	}
 	for _, productFile := range p {
 		wg.Add(1)
-		log.Printf("Checking %v", productFile)
+		log.Printf("checking %v", productFile)
 		ch <- productFile
 	}
 	wg.Wait()
+	log.Printf("finished")
 	close(ch)
 }
 
