@@ -10,8 +10,8 @@ type Before struct {
 	value time.Time
 }
 
-// IsOK returns true if value occured before Before
-func (b Before) IsOK(file os.FileInfo) bool {
+// OK returns true if value occured before Before
+func (b Before) OK(file os.FileInfo) bool {
 	if (b.value == time.Time{}) {
 		return true
 	}

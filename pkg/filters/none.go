@@ -10,8 +10,8 @@ type None struct {
 	values []string
 }
 
-// IsOK returns true if the value is not in None
-func (n None) IsOK(file os.FileInfo) bool {
+// OK returns true if the value is not in None
+func (n None) OK(file os.FileInfo) bool {
 	if (len(n.values)) < 1 || n.values[0] == "" {
 		return true
 	}

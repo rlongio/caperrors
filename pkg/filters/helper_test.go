@@ -51,15 +51,15 @@ func NewModNameMock(name string) FileInfoMock {
 }
 
 type MockFilter struct {
-	isOK bool
+	ok bool
 }
 
-func NewMockFilter(isOK bool) MockFilter {
+func NewMockFilter(ok bool) MockFilter {
 	return MockFilter{
-		isOK: isOK,
+		ok: ok,
 	}
 }
 
-func (m MockFilter) IsOK(file os.FileInfo) bool {
-	return m.isOK
+func (m MockFilter) OK(file os.FileInfo) bool {
+	return m.ok
 }

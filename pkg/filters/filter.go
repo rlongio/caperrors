@@ -16,10 +16,10 @@ func (f *Filter) Add(filter Filterer) {
 	f.filters = append(f.filters, filter)
 }
 
-// IsOK returns true if all Filterers IsOK's return true
-func (f Filter) IsOK(file os.FileInfo) bool {
+// OK returns true if all Filterers OK's return true
+func (f Filter) OK(file os.FileInfo) bool {
 	for _, f := range f.filters {
-		if !f.IsOK(file) {
+		if !f.OK(file) {
 			return false
 		}
 	}

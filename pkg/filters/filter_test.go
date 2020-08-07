@@ -59,8 +59,8 @@ func TestIsOK(t *testing.T) {
 			filter.Add(NewMockFilter(result))
 		}
 
-		if filter.IsOK(nil) != test.expected {
-			t.Errorf("%v does not equal %v", filter.IsOK(nil), test.expected)
+		if filter.OK(nil) != test.expected {
+			t.Errorf("%v does not equal %v", filter.OK(nil), test.expected)
 		}
 	}
 }

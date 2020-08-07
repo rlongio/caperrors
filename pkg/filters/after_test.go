@@ -33,7 +33,7 @@ var afterResults = []AfterResult{
 func TestAfter(t *testing.T) {
 	for _, test := range afterResults {
 		a := NewAfter(test.time)
-		result := a.IsOK(test.file)
+		result := a.OK(test.file)
 		if result != test.expected {
 			t.Errorf("%v: Expected %v, got %v", test.file.ModTime(), test.expected, result)
 		}

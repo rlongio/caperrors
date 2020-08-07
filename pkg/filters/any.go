@@ -10,8 +10,8 @@ type Any struct {
 	values []string
 }
 
-// IsOK returns true if the value is in Any
-func (a Any) IsOK(file os.FileInfo) bool {
+// OK returns true if the value is in Any
+func (a Any) OK(file os.FileInfo) bool {
 	if (len(a.values)) < 1 || a.values[0] == "" {
 		return true
 	}

@@ -15,17 +15,16 @@ func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filte
 	for _, path := range paths {
 		err := filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
 			if err != nil {
-				log.Fatalln(err)
+				log.Printf(err.Error())
 				return filepath.SkipDir
 			}
-			if !file.IsDir() && filter.IsOK(file) {
+			if ok(file, filter) {
 				absdir, err := absdir(path, file)
 				if err != nil {
-					log.Printf("ERROR: %v", err)
+					log.Printf(err.Error())
 					return err
 				}
 				f := product.NewFile(absdir, file)
-				log.Printf("Appending %v", filepath.Join(absdir, file.Name()))
 				files = append(files, f)
 			}
 			return nil
@@ -35,6 +34,11 @@ func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filte
 		}
 	}
 	return
+}
+
+// isOK returns true if requirements are met and filter is true
+func ok(file os.FileInfo, filter filters.Filter) bool {
+	return !file.IsDir() && filter.OK(file)
 }
 
 // absdir returns absolute directory combining a relative path and file

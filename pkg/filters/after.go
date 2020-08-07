@@ -10,8 +10,8 @@ type After struct {
 	value time.Time
 }
 
-// IsOK returns true if value occured after After
-func (a After) IsOK(file os.FileInfo) bool {
+// OK returns true if value occured after After
+func (a After) OK(file os.FileInfo) bool {
 	if (a.value == time.Time{}) {
 		return true
 	}

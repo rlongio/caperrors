@@ -52,7 +52,7 @@ var noneResults = []NoneResult{
 func TestNone(t *testing.T) {
 	for _, test := range noneResults {
 		a := NewNone(test.values)
-		result := a.IsOK(test.file)
+		result := a.OK(test.file)
 		if result != test.expected {
 			t.Errorf("%v: Expected %v, got %v", test.file.Name(), test.expected, result)
 		}
