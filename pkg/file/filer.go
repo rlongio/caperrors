@@ -7,7 +7,7 @@ import (
 // Filer contains file operations
 type Filer interface {
 	Ext() string
-	Abspath() string
+	Path() string
 	Base() string
 	ModTime() time.Time
 	HasExtension(string) bool

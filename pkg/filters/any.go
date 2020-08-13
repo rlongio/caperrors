@@ -17,7 +17,7 @@ func (a Any) OK(f file.Filer) bool {
 		return true
 	}
 	for _, needle := range a.values {
-		if strings.Contains(f.Abspath(), needle) {
+		if strings.Contains(f.Path(), needle) {
 			return true
 		}
 	}

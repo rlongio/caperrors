@@ -24,8 +24,8 @@ func TestNewFile(t *testing.T) {
 	for _, test := range newFileResults {
 		a := NewFile(test.path, test.fileInfo)
 
-		if a.Abspath() != filepath.Join(test.path, a.Name()) {
-			t.Errorf("Expected %v, got %v", filepath.Join(test.path, a.Name()), a.Abspath())
+		if a.Path() != filepath.Join(test.path, a.Name()) {
+			t.Errorf("Expected %v, got %v", filepath.Join(test.path, a.Name()), a.Path())
 		}
 
 		if a.Base() != test.fileInfo.Name() {

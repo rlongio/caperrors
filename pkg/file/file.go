@@ -22,12 +22,12 @@ func NewFile(path string, file os.FileInfo) File {
 
 // Ext returns the file extension
 func (f File) Ext() string {
-	return filepath.Ext(f.Abspath())
+	return filepath.Ext(f.Path())
 }
 
-// Abspath returns the relative filepath and name
-func (f File) Abspath() string {
-	return filepath.Join(f.path, f.Name())
+// Path returns the relative filepath and name
+func (f File) Path() string {
+	return f.path
 }
 
 // Base returns the name of the file without the path

@@ -93,7 +93,7 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) {
 // idFromXMLFile returns product ID parsed from the XML file
 func (f File) idFromXMLFile(logFilePath string) (id string, err error) {
 	id = "not found"
-	file, err := os.Open(f.File.Abspath())
+	file, err := os.Open(f.File.Path())
 	if err != nil {
 		return
 	}
