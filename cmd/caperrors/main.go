@@ -3,7 +3,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"strings"
 	"sync"
@@ -56,7 +55,6 @@ func main() {
 	ch := make(chan product.File)
 	log.Printf("gathering product files..")
 	p := internal.ProductFilesFromDirectoriesRecursively(filePaths, filter)
-	fmt.Println(p)
 	log.Printf("found %v product files", len(p))
 
 	for i := 1; i <= 5; i++ { // worker goroutines
