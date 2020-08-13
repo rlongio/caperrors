@@ -30,22 +30,19 @@ func (r FileResult) paths() (results []string) {
 
 var fileResults = []FileResult{
 	{
-		fileBase:        "dummy_test.xml",
-		filePath:        "../../testdata/files",
+		filePath:        "../../testdata/files/dummy_test.xml",
 		logFilePath:     "../../testdata/files/CapHandler.log",
 		expectedID:      "wea_003_imminent_threat_test12020624141331",
 		expectedMessage: "",
 	},
 	{
-		fileBase:        "09.Jul.2020.15.50.24.3219ceafa85-ef99-41c9-a0ae-c1ef620afb42.xml",
-		filePath:        "../../testdata/files",
+		filePath:        "../../testdata/files/09.Jul.2020.15.50.24.3219ceafa85-ef99-41c9-a0ae-c1ef620afb42.xml",
 		logFilePath:     "../../testdata/files/CapHandler.log",
 		expectedID:      "Chan_Amber_test1202069114831",
 		expectedMessage: "[INFO ] - Unable to deserialize <alert> block #1 in /var/lib/caphandler/input/ipaws/09.Jul.2020.15.50.24.3219ceafa85-ef99-41c9-a0ae-c1ef620afb42.xml into an Alert object (gov.noaa.nws.cap.exception.DecoderException: <alert> block #1 in /var/lib/caphandler/input/ipaws/09.Jul.2020.15.50.24.3219ceafa85-ef99-41c9-a0ae-c1ef620afb42.xml has no <Signature><KeyInfo><X509Data><X509SubjectName> element)",
 	},
 	{
-		fileBase:        "ESFPUB.09164211.443799.txt",
-		filePath:        "../../testdata/files",
+		filePath:        "../../testdata/files/ESFPUB.09164211.443799.txt",
 		logFilePath:     "../../testdata/files/CapHandler.log",
 		expectedID:      "47a9525a06cce867a5659855ef2600fe51d4da78",
 		expectedMessage: "[INFO ] - Unable to decode the text product in /var/lib/caphandler/input/awips/wmo/ESFPUB.09164211.443799.txt (gov.noaa.nws.cap.exception.DecoderException: Probabilistic Hydrologic Outlook products aren't supported)",
@@ -61,14 +58,14 @@ func TestMain(m *testing.M) {
 
 func TestIDAndMessage(t *testing.T) {
 	for _, test := range fileResults {
-		f, err := os.Open(filepath.Join(test.filePath, test.fileBase))
+		f, err := os.Open(test.filePath)
 		defer f.Close()
 		if err != nil {
-			t.Fatalf("Could not open %v", filepath.Join(test.filePath, test.fileBase))
+			t.Fatalf("Could not open %v", test.filePath)
 		}
 		fileinfo, err := f.Stat()
 		if err != nil {
-			t.Fatalf("Could not stat %v", filepath.Join(test.filePath, test.fileBase))
+			t.Fatalf("Could not stat %v", test.filePath)
 		}
 		x := NewFile(file.NewFile(test.filePath, fileinfo))
 		if id, _ := x.ID(test.logFilePath); id != test.expectedID {

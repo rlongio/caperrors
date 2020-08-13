@@ -2,7 +2,6 @@ package file
 
 import (
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/SaltyCatFish/caperrors/pkg/file/mocks"
@@ -15,7 +14,7 @@ type NewFileResult struct {
 
 var newFileResults = []NewFileResult{
 	{
-		path:     "/home/derp",
+		path:     "/home/derp/file.txt",
 		fileInfo: mocks.NewDefaultFileInfoMock(),
 	},
 }
@@ -24,8 +23,8 @@ func TestNewFile(t *testing.T) {
 	for _, test := range newFileResults {
 		a := NewFile(test.path, test.fileInfo)
 
-		if a.Path() != filepath.Join(test.path, a.Name()) {
-			t.Errorf("Expected %v, got %v", filepath.Join(test.path, a.Name()), a.Path())
+		if a.Path() != test.path {
+			t.Errorf("Expected %v, got %v", test.path, a.Path())
 		}
 
 		if a.Base() != test.fileInfo.Name() {
