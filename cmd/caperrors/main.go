@@ -3,14 +3,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/SaltyCatFish/caperrors/internal"
-	filters "github.com/SaltyCatFish/caperrors/pkg/filters"
-	product "github.com/SaltyCatFish/caperrors/pkg/product"
+	"github.com/SaltyCatFish/caperrors/pkg/filters"
+	"github.com/SaltyCatFish/caperrors/pkg/product"
 )
 
 func main() {
@@ -55,25 +56,28 @@ func main() {
 	ch := make(chan product.File)
 	log.Printf("gathering product files..")
 	p := internal.ProductFilesFromDirectoriesRecursively(filePaths, filter)
+	fmt.Println(p)
 	log.Printf("found %v product files", len(p))
 
 	for i := 1; i <= 5; i++ { // worker goroutines
-		go worker(fx, *logFilePath, ch, &wg)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			worker(fx, *logFilePath, ch)
+		}()
 	}
 	for _, file := range p {
-		wg.Add(1)
 		ch <- product.NewFile(file)
 	}
+	close(ch)
 	wg.Wait()
 	log.Printf("finished")
-	close(ch)
 }
 
 // worker creates a product from a file and logfile
-func worker(fx product.Process, logFilePath string, cs chan product.File, wg *sync.WaitGroup) {
+func worker(fx product.Process, logFilePath string, cs <-chan product.File) {
 	for i := range cs {
 		fx(product.CreateProduct(i, logFilePath))
-		wg.Done()
 	}
 }
 

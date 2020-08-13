@@ -24,18 +24,18 @@ func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filte
 				log.Printf(err.Error())
 				return err
 			}
-			files := file.NewFiles()
-			files.Add(file.NewFile(absdir, f))
+			results.Add(file.NewFile(absdir, f))
 			return nil
 		})
 		if err != nil {
 			log.Printf(err.Error())
 		}
 	}
-	return results
+	results = sortAndFilterResults(results, filter)
+	return
 }
 
-func sortAndFilterResults(files file.Files, filter filters.Filter) (results file.Files, err error) {
+func sortAndFilterResults(files file.Files, filter filters.Filter) (results file.Files) {
 	files.SortDesc()
 	for _, file := range files {
 		if ok(file, filter) {
