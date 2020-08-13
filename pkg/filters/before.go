@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"os"
 	"time"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Before holds a time.Time
@@ -11,7 +12,7 @@ type Before struct {
 }
 
 // OK returns true if value occured before Before
-func (b Before) OK(file os.FileInfo) bool {
+func (b Before) OK(file file.Filer) bool {
 	if (b.value == time.Time{}) {
 		return true
 	}

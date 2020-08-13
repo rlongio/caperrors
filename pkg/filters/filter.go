@@ -2,8 +2,9 @@
 package filters
 
 import (
-	"os"
 	"path/filepath"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Filter holds a slice of Filterers
@@ -17,7 +18,7 @@ func (f *Filter) Add(filter Filterer) {
 }
 
 // OK returns true if all Filterers OK's return true
-func (f Filter) OK(file os.FileInfo) bool {
+func (f Filter) OK(file file.Filer) bool {
 	for _, f := range f.filters {
 		if !f.OK(file) {
 			return false
@@ -32,7 +33,7 @@ func NewFilter() Filter {
 }
 
 // absFilePath returns the absolute file path of a file
-func absFilePath(file os.FileInfo) string {
+func absFilePath(file file.Filer) string {
 	path, _ := filepath.Abs(file.Name())
-	return path
+	return filepath.Join(path, file.Name())
 }

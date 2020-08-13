@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"os"
 	"strings"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Any holds a slice of values
@@ -11,12 +12,12 @@ type Any struct {
 }
 
 // OK returns true if the value is in Any
-func (a Any) OK(file os.FileInfo) bool {
+func (a Any) OK(f file.Filer) bool {
 	if (len(a.values)) < 1 || a.values[0] == "" {
 		return true
 	}
 	for _, needle := range a.values {
-		if strings.Contains(absFilePath(file), needle) {
+		if strings.Contains(f.Abspath(), needle) {
 			return true
 		}
 	}

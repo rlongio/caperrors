@@ -1,13 +1,15 @@
 package filters
 
 import (
-	"os"
 	"testing"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
+	"github.com/SaltyCatFish/caperrors/pkg/file/mocks"
 )
 
 type AnyResult struct {
 	values   []string
-	file     os.FileInfo
+	file     file.File
 	expected bool
 }
 
@@ -16,19 +18,19 @@ var anyResults = []AnyResult{
 		values: []string{
 			"hello",
 		},
-		file:     NewModNameMock("hello"),
+		file:     file.NewFile("hello", mocks.NewModNameMock("world")),
 		expected: true,
 	},
 	{
 		values: []string{
 			"hello",
 		},
-		file:     NewModNameMock("goodbye"),
+		file:     file.NewFile("goodbye", mocks.NewModNameMock("world")),
 		expected: false,
 	},
 	{
 		values:   []string{},
-		file:     NewModNameMock("emptyAny"),
+		file:     file.NewFile("empty", mocks.NewModNameMock("any")),
 		expected: true,
 	},
 	{
@@ -36,7 +38,7 @@ var anyResults = []AnyResult{
 			"hello",
 			"goodbye",
 		},
-		file:     NewModNameMock("hello"),
+		file:     file.NewFile("hello", mocks.NewModNameMock("howdy")),
 		expected: true,
 	},
 	{
@@ -44,7 +46,7 @@ var anyResults = []AnyResult{
 			"hello",
 			"goodbye",
 		},
-		file:     NewModNameMock("afternoon"),
+		file:     file.NewFile("howdy", mocks.NewModNameMock("partner")),
 		expected: false,
 	},
 }

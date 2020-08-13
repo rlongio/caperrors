@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	file "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 type FileResult struct {
@@ -59,16 +61,16 @@ func TestMain(m *testing.M) {
 
 func TestIDAndMessage(t *testing.T) {
 	for _, test := range fileResults {
-		file, err := os.Open(filepath.Join(test.filePath, test.fileBase))
-		defer file.Close()
+		f, err := os.Open(filepath.Join(test.filePath, test.fileBase))
+		defer f.Close()
 		if err != nil {
 			t.Fatalf("Could not open %v", filepath.Join(test.filePath, test.fileBase))
 		}
-		fileinfo, err := file.Stat()
+		fileinfo, err := f.Stat()
 		if err != nil {
 			t.Fatalf("Could not stat %v", filepath.Join(test.filePath, test.fileBase))
 		}
-		x := NewFile(test.filePath, fileinfo)
+		x := NewFile(file.NewFile(test.filePath, fileinfo))
 		if id, _ := x.ID(test.logFilePath); id != test.expectedID {
 			t.Fatalf("%v does not equal %v", id, test.expectedID)
 		}

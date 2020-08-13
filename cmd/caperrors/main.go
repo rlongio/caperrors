@@ -60,9 +60,9 @@ func main() {
 	for i := 1; i <= 5; i++ { // worker goroutines
 		go worker(fx, *logFilePath, ch, &wg)
 	}
-	for _, productFile := range p {
+	for _, file := range p {
 		wg.Add(1)
-		ch <- productFile
+		ch <- product.NewFile(file)
 	}
 	wg.Wait()
 	log.Printf("finished")

@@ -1,13 +1,15 @@
 package filters
 
 import (
-	"os"
 	"testing"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
+	"github.com/SaltyCatFish/caperrors/pkg/file/mocks"
 )
 
 type NoneResult struct {
 	values   []string
-	file     os.FileInfo
+	file     file.File
 	expected bool
 }
 
@@ -16,19 +18,19 @@ var noneResults = []NoneResult{
 		values: []string{
 			"hello",
 		},
-		file:     NewModNameMock("hello"),
+		file:     file.NewFile("path", mocks.NewModNameMock("hello")),
 		expected: false,
 	},
 	{
 		values: []string{
 			"hello",
 		},
-		file:     NewModNameMock("goodbye"),
+		file:     file.NewFile("path", mocks.NewModNameMock("goodbye")),
 		expected: true,
 	},
 	{
 		values:   []string{},
-		file:     NewModNameMock("emptyNone"),
+		file:     file.NewFile("path", mocks.NewModNameMock("emptyNone")),
 		expected: true,
 	},
 	{
@@ -36,7 +38,7 @@ var noneResults = []NoneResult{
 			"hello",
 			"goodbye",
 		},
-		file:     NewModNameMock("hello"),
+		file:     file.NewFile("path", mocks.NewModNameMock("hello")),
 		expected: false,
 	},
 	{
@@ -44,7 +46,7 @@ var noneResults = []NoneResult{
 			"hello",
 			"goodbye",
 		},
-		file:     NewModNameMock("afternoon"),
+		file:     file.NewFile("path", mocks.NewModNameMock("afternoon")),
 		expected: true,
 	},
 }

@@ -1,30 +1,32 @@
 package filters
 
 import (
-	"os"
 	"testing"
 	"time"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
+	"github.com/SaltyCatFish/caperrors/pkg/file/mocks"
 )
 
 type BeforeResult struct {
-	file     os.FileInfo
+	file     file.File
 	time     time.Time
 	expected bool
 }
 
 var beforeResults = []BeforeResult{
 	{
-		file:     NewModTimeMock(time.Date(2021, time.January, 1, 0, 0, 0, 0, time.Local)),
+		file:     file.NewFile("path", mocks.NewModTimeMock(time.Date(2021, time.January, 1, 0, 0, 0, 0, time.Local))),
 		time:     time.Date(2020, time.January, 1, 0, 0, 0, 0, time.Local),
 		expected: false,
 	},
 	{
-		file:     NewModTimeMock(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.Local)),
+		file:     file.NewFile("path", mocks.NewModTimeMock(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.Local))),
 		time:     time.Date(2021, time.January, 1, 0, 0, 0, 0, time.Local),
 		expected: true,
 	},
 	{
-		file:     NewModTimeMock(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.Local)),
+		file:     file.NewFile("path", mocks.NewModTimeMock(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.Local))),
 		time:     time.Time{},
 		expected: true,
 	},

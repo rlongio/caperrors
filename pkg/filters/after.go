@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"os"
 	"time"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // After holds a time.Time
@@ -11,11 +12,11 @@ type After struct {
 }
 
 // OK returns true if value occured after After
-func (a After) OK(file os.FileInfo) bool {
+func (a After) OK(f file.Filer) bool {
 	if (a.value == time.Time{}) {
 		return true
 	}
-	return file.ModTime().After(a.value)
+	return f.ModTime().After(a.value)
 }
 
 // NewAfter returns a new instance of After

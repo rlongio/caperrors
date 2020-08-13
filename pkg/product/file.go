@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
+
+	file "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Filer contains methods to retrieve a product ID and error message from a log file
@@ -17,37 +18,34 @@ type Filer interface {
 	ErrorMessage(string) (string, error)
 }
 
-// File represents a file that contains product information
+// File contains methods for retrieving product information
+// from a file
 type File struct {
-	path string
-	file os.FileInfo
+	file.File
 }
 
-// NewFile returns a new instance of File
-func NewFile(path string, file os.FileInfo) File {
-	return File{
-		path: path,
-		file: file,
-	}
+// NewFile returns a File struct
+func NewFile(f file.File) File {
+	return File{f}
 }
 
 // ID retrieves the product ID from either a .txt or .xml file
 func (f File) ID(logFilePath string) (id string, err error) {
-	if f.hasExtension(".txt") {
+	if f.HasExtension(".txt") {
 		id, err = f.idFromTextFile(logFilePath)
 		return
 	}
-	if f.hasExtension(".xml") {
+	if f.File.HasExtension(".xml") {
 		id, err = f.idFromXMLFile(logFilePath)
 		return
 	}
-	return "", fmt.Errorf("Unknown file extension: %v", f.base())
+	return "", fmt.Errorf("Unknown file extension: %v", f.File.Base())
 }
 
 // ErrorMessage returns the error information found for the product in logFilePath
 func (f File) ErrorMessage(logFilePath string) (message string, err error) {
 
-	regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.base())
+	regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.File.Base())
 	regex := regexp.MustCompile(regexSearchString)
 
 	logFile, err := os.Open(logFilePath)
@@ -72,21 +70,6 @@ func (f File) ErrorMessage(logFilePath string) (message string, err error) {
 	return
 }
 
-// Ext returns the file extension
-func (f File) ext() string {
-	return filepath.Ext(f.abspath())
-}
-
-// abspath returns the relative filepath and name
-func (f File) abspath() (path string) {
-	return filepath.Join(f.path, f.file.Name())
-}
-
-// base returns the name of the file without the path
-func (f File) base() string {
-	return f.file.Name()
-}
-
 // idFromTextFile returns the matching id for product in logFilePath
 func (f File) idFromTextFile(logFilePath string) (id string, err error) {
 	regex := regexp.MustCompile(`(=\s)(.*$)`)
@@ -99,7 +82,7 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) {
 
 	scanner := bufio.NewScanner(logFile)
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), f.base()) && strings.Contains(scanner.Text(), "The ID of the text product in") {
+		if strings.Contains(scanner.Text(), f.File.Base()) && strings.Contains(scanner.Text(), "The ID of the text product in") {
 			return regex.FindStringSubmatch(scanner.Text())[2], err
 		}
 	}
@@ -110,7 +93,7 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) {
 // idFromXMLFile returns product ID parsed from the XML file
 func (f File) idFromXMLFile(logFilePath string) (id string, err error) {
 	id = "not found"
-	file, err := os.Open(f.abspath())
+	file, err := os.Open(f.File.Abspath())
 	if err != nil {
 		return
 	}
@@ -131,13 +114,4 @@ func (f File) idFromXMLFile(logFilePath string) (id string, err error) {
 	}
 	id = identifier.ID
 	return
-}
-
-// hasExtension returns true if the file has the passes extension in its path
-// false otherwise
-func (f File) hasExtension(extension string) bool {
-	if strings.ToLower(f.ext()) == strings.ToLower(extension) {
-		return true
-	}
-	return false
 }

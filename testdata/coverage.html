@@ -54,21 +54,25 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/SaltyCatFish/caperrors/pkg/filters/after.go (100.0%)</option>
+				<option value="file0">github.com/SaltyCatFish/caperrors/pkg/file/file.go (100.0%)</option>
 				
-				<option value="file1">github.com/SaltyCatFish/caperrors/pkg/filters/any.go (100.0%)</option>
+				<option value="file1">github.com/SaltyCatFish/caperrors/pkg/file/files.go (100.0%)</option>
 				
-				<option value="file2">github.com/SaltyCatFish/caperrors/pkg/filters/before.go (100.0%)</option>
+				<option value="file2">github.com/SaltyCatFish/caperrors/pkg/filters/after.go (100.0%)</option>
 				
-				<option value="file3">github.com/SaltyCatFish/caperrors/pkg/filters/filter.go (100.0%)</option>
+				<option value="file3">github.com/SaltyCatFish/caperrors/pkg/filters/any.go (100.0%)</option>
 				
-				<option value="file4">github.com/SaltyCatFish/caperrors/pkg/filters/none.go (100.0%)</option>
+				<option value="file4">github.com/SaltyCatFish/caperrors/pkg/filters/before.go (100.0%)</option>
 				
-				<option value="file5">github.com/SaltyCatFish/caperrors/pkg/product/file.go (83.9%)</option>
+				<option value="file5">github.com/SaltyCatFish/caperrors/pkg/filters/filter.go (100.0%)</option>
 				
-				<option value="file6">github.com/SaltyCatFish/caperrors/pkg/product/process.go (0.0%)</option>
+				<option value="file6">github.com/SaltyCatFish/caperrors/pkg/filters/none.go (100.0%)</option>
 				
-				<option value="file7">github.com/SaltyCatFish/caperrors/pkg/product/product.go (100.0%)</option>
+				<option value="file7">github.com/SaltyCatFish/caperrors/pkg/product/file.go (82.0%)</option>
+				
+				<option value="file8">github.com/SaltyCatFish/caperrors/pkg/product/process.go (0.0%)</option>
+				
+				<option value="file9">github.com/SaltyCatFish/caperrors/pkg/product/product.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -82,11 +86,89 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package filters
+		<pre class="file" id="file0" style="display: none">package file
 
 import (
         "os"
+        "path/filepath"
+        "strings"
+)
+
+// File represents a file that contains product information
+type File struct {
+        path string
+        os.FileInfo
+}
+
+// NewFile returns a new instance of File
+func NewFile(path string, file os.FileInfo) File <span class="cov8" title="1">{
+        return File{
+                path:     path,
+                FileInfo: file,
+        }
+}</span>
+
+// Ext returns the file extension
+func (f File) Ext() string <span class="cov8" title="1">{
+        return filepath.Ext(f.Abspath())
+}</span>
+
+// Abspath returns the relative filepath and name
+func (f File) Abspath() string <span class="cov8" title="1">{
+        return filepath.Join(f.path, f.Name())
+}</span>
+
+// Base returns the name of the file without the path
+func (f File) Base() string <span class="cov8" title="1">{
+        return f.Name()
+}</span>
+
+// HasExtension returns true if the file has the passes extension in its path
+// false otherwise
+func (f File) HasExtension(extension string) bool <span class="cov8" title="1">{
+        if strings.ToLower(f.Ext()) == strings.ToLower(extension) </span><span class="cov8" title="1">{
+                return true
+        }</span>
+        <span class="cov8" title="1">return false</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package file
+
+import "sort"
+
+// Files holds a slice of File
+type Files []File
+
+// NewFiles returns a slice of File
+func NewFiles() Files <span class="cov8" title="1">{
+        return Files{}
+}</span>
+
+//Add adds a file
+func (f *Files) Add(file File) <span class="cov8" title="1">{
+        *f = append(*f, file)
+}</span>
+
+// SortAsc returns the files sorted by ModTime descending
+func (f Files) SortAsc() <span class="cov8" title="1">{
+        sort.Slice(f, func(i, j int) bool </span><span class="cov8" title="1">{ return f[i].ModTime().Before(f[j].ModTime()) }</span>)
+        <span class="cov8" title="1">return</span>
+}
+
+// SortDesc returns the files sorted by ModTime descending
+func (f Files) SortDesc() <span class="cov8" title="1">{
+        sort.Slice(f, func(i, j int) bool </span><span class="cov8" title="1">{ return f[i].ModTime().After(f[j].ModTime()) }</span>)
+        <span class="cov8" title="1">return</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package filters
+
+import (
         "time"
+
+        "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // After holds a time.Time
@@ -94,12 +176,12 @@ type After struct {
         value time.Time
 }
 
-// IsOK returns true if value occured after After
-func (a After) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
+// OK returns true if value occured after After
+func (a After) OK(f file.Filer) bool <span class="cov8" title="1">{
         if (a.value == time.Time{}) </span><span class="cov8" title="1">{
                 return true
         }</span>
-        <span class="cov8" title="1">return file.ModTime().After(a.value)</span>
+        <span class="cov8" title="1">return f.ModTime().After(a.value)</span>
 }
 
 // NewAfter returns a new instance of After
@@ -110,11 +192,12 @@ func NewAfter(value time.Time) After <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file1" style="display: none">package filters
+		<pre class="file" id="file3" style="display: none">package filters
 
 import (
-        "os"
         "strings"
+
+        "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Any holds a slice of values
@@ -122,13 +205,13 @@ type Any struct {
         values []string
 }
 
-// IsOK returns true if the value is in Any
-func (a Any) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
-        if (len(a.values)) == 0 </span><span class="cov8" title="1">{
+// OK returns true if the value is in Any
+func (a Any) OK(f file.Filer) bool <span class="cov8" title="1">{
+        if (len(a.values)) &lt; 1 || a.values[0] == "" </span><span class="cov8" title="1">{
                 return true
         }</span>
         <span class="cov8" title="1">for _, needle := range a.values </span><span class="cov8" title="1">{
-                if strings.Contains(absFilePath(file), needle) </span><span class="cov8" title="1">{
+                if strings.Contains(f.Abspath(), needle) </span><span class="cov8" title="1">{
                         return true
                 }</span>
         }
@@ -143,11 +226,12 @@ func NewAny(values []string) Any <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file2" style="display: none">package filters
+		<pre class="file" id="file4" style="display: none">package filters
 
 import (
-        "os"
         "time"
+
+        "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Before holds a time.Time
@@ -155,8 +239,8 @@ type Before struct {
         value time.Time
 }
 
-// IsOK returns true if value occured before Before
-func (b Before) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
+// OK returns true if value occured before Before
+func (b Before) OK(file file.Filer) bool <span class="cov8" title="1">{
         if (b.value == time.Time{}) </span><span class="cov8" title="1">{
                 return true
         }</span>
@@ -171,12 +255,13 @@ func NewBefore(value time.Time) Before <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file3" style="display: none">// Package filters provides ways of filtering files.
+		<pre class="file" id="file5" style="display: none">// Package filters provides ways of filtering files.
 package filters
 
 import (
-        "os"
         "path/filepath"
+
+        "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Filter holds a slice of Filterers
@@ -189,10 +274,10 @@ func (f *Filter) Add(filter Filterer) <span class="cov8" title="1">{
         f.filters = append(f.filters, filter)
 }</span>
 
-// IsOK returns true if all Filterers IsOK's return true
-func (f Filter) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
+// OK returns true if all Filterers OK's return true
+func (f Filter) OK(file file.Filer) bool <span class="cov8" title="1">{
         for _, f := range f.filters </span><span class="cov8" title="1">{
-                if !f.IsOK(file) </span><span class="cov8" title="1">{
+                if !f.OK(file) </span><span class="cov8" title="1">{
                         return false
                 }</span>
         }
@@ -205,17 +290,18 @@ func NewFilter() Filter <span class="cov8" title="1">{
 }</span>
 
 // absFilePath returns the absolute file path of a file
-func absFilePath(file os.FileInfo) string <span class="cov8" title="1">{
+func absFilePath(file file.Filer) string <span class="cov8" title="1">{
         path, _ := filepath.Abs(file.Name())
-        return path
+        return filepath.Join(path, file.Name())
 }</span>
 </pre>
 		
-		<pre class="file" id="file4" style="display: none">package filters
+		<pre class="file" id="file6" style="display: none">package filters
 
 import (
-        "os"
         "strings"
+
+        "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // None holds a slice of values
@@ -223,9 +309,9 @@ type None struct {
         values []string
 }
 
-// IsOK returns true if the value is not in None
-func (n None) IsOK(file os.FileInfo) bool <span class="cov8" title="1">{
-        if (len(n.values)) == 0 </span><span class="cov8" title="1">{
+// OK returns true if the value is not in None
+func (n None) OK(file file.Filer) bool <span class="cov8" title="1">{
+        if (len(n.values)) &lt; 1 || n.values[0] == "" </span><span class="cov8" title="1">{
                 return true
         }</span>
         <span class="cov8" title="1">for _, needle := range n.values </span><span class="cov8" title="1">{
@@ -244,7 +330,7 @@ func NewNone(values []string) None <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file5" style="display: none">package product
+		<pre class="file" id="file7" style="display: none">package product
 
 import (
         "bufio"
@@ -252,9 +338,10 @@ import (
         "fmt"
         "io/ioutil"
         "os"
-        "path/filepath"
         "regexp"
         "strings"
+
+        file "github.com/SaltyCatFish/caperrors/pkg/file"
 )
 
 // Filer contains methods to retrieve a product ID and error message from a log file
@@ -263,37 +350,34 @@ type Filer interface {
         ErrorMessage(string) (string, error)
 }
 
-// File represents a file that contains product information
+// File contains methods for retrieving product information
+// from a file
 type File struct {
-        path string
-        file os.FileInfo
+        file.File
 }
 
-// NewFile returns a new instance of File
-func NewFile(path string, file os.FileInfo) File <span class="cov8" title="1">{
-        return File{
-                path: path,
-                file: file,
-        }
+// NewFile returns a File struct
+func NewFile(f file.File) File <span class="cov8" title="1">{
+        return File{f}
 }</span>
 
 // ID retrieves the product ID from either a .txt or .xml file
 func (f File) ID(logFilePath string) (id string, err error) <span class="cov8" title="1">{
-        if f.hasExtension(".txt") </span><span class="cov8" title="1">{
+        if f.HasExtension(".txt") </span><span class="cov8" title="1">{
                 id, err = f.idFromTextFile(logFilePath)
                 return
         }</span>
-        <span class="cov8" title="1">if f.hasExtension(".xml") </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if f.File.HasExtension(".xml") </span><span class="cov8" title="1">{
                 id, err = f.idFromXMLFile(logFilePath)
                 return
         }</span>
-        <span class="cov0" title="0">return "", fmt.Errorf("Unknown file extension: %v", f.base())</span>
+        <span class="cov0" title="0">return "", fmt.Errorf("Unknown file extension: %v", f.File.Base())</span>
 }
 
 // ErrorMessage returns the error information found for the product in logFilePath
 func (f File) ErrorMessage(logFilePath string) (message string, err error) <span class="cov8" title="1">{
 
-        regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.base())
+        regexSearchString := fmt.Sprintf("Attempting to move.*/caphandler/error.*%v$", f.File.Base())
         regex := regexp.MustCompile(regexSearchString)
 
         logFile, err := os.Open(logFilePath)
@@ -318,21 +402,6 @@ func (f File) ErrorMessage(logFilePath string) (message string, err error) <span
         <span class="cov8" title="1">return</span>
 }
 
-// Ext returns the file extension
-func (f File) ext() string <span class="cov8" title="1">{
-        return filepath.Ext(f.abspath())
-}</span>
-
-// abspath returns the relative filepath and name
-func (f File) abspath() (path string) <span class="cov8" title="1">{
-        return filepath.Join(f.path, f.file.Name())
-}</span>
-
-// base returns the name of the file without the path
-func (f File) base() string <span class="cov8" title="1">{
-        return f.file.Name()
-}</span>
-
 // idFromTextFile returns the matching id for product in logFilePath
 func (f File) idFromTextFile(logFilePath string) (id string, err error) <span class="cov8" title="1">{
         regex := regexp.MustCompile(`(=\s)(.*$)`)
@@ -345,7 +414,7 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) <span cl
 
         scanner := bufio.NewScanner(logFile)
         for scanner.Scan() </span><span class="cov8" title="1">{
-                if strings.Contains(scanner.Text(), f.base()) &amp;&amp; strings.Contains(scanner.Text(), "The ID of the text product in") </span><span class="cov8" title="1">{
+                if strings.Contains(scanner.Text(), f.File.Base()) &amp;&amp; strings.Contains(scanner.Text(), "The ID of the text product in") </span><span class="cov8" title="1">{
                         return regex.FindStringSubmatch(scanner.Text())[2], err
                 }</span>
         }
@@ -356,7 +425,7 @@ func (f File) idFromTextFile(logFilePath string) (id string, err error) <span cl
 // idFromXMLFile returns product ID parsed from the XML file
 func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span class="cov8" title="1">{
         id = "not found"
-        file, err := os.Open(f.abspath())
+        file, err := os.Open(f.File.Abspath())
         if err != nil </span><span class="cov0" title="0">{
                 return
         }</span>
@@ -378,18 +447,9 @@ func (f File) idFromXMLFile(logFilePath string) (id string, err error) <span cla
         <span class="cov8" title="1">id = identifier.ID
         return</span>
 }
-
-// hasExtension returns true if the file has the passes extension in its path
-// false otherwise
-func (f File) hasExtension(extension string) bool <span class="cov8" title="1">{
-        if strings.ToLower(f.ext()) == strings.ToLower(extension) </span><span class="cov8" title="1">{
-                return true
-        }</span>
-        <span class="cov8" title="1">return false</span>
-}
 </pre>
 		
-		<pre class="file" id="file6" style="display: none">package product
+		<pre class="file" id="file8" style="display: none">package product
 
 import "fmt"
 
@@ -402,7 +462,7 @@ func (p Product) Print() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file7" style="display: none">// Package product contains tools for creating and working on NOAA products.
+		<pre class="file" id="file9" style="display: none">// Package product contains tools for creating and working on NOAA products.
 package product
 
 import (

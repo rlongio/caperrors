@@ -2,6 +2,10 @@ package filters
 
 import (
 	"testing"
+
+	"github.com/SaltyCatFish/caperrors/pkg/file"
+	filemock "github.com/SaltyCatFish/caperrors/pkg/file/mocks"
+	filtermock "github.com/SaltyCatFish/caperrors/pkg/filters/mocks"
 )
 
 type addResult struct {
@@ -21,7 +25,7 @@ var addResults = []addResult{
 func TestAdd(t *testing.T) {
 	for _, test := range addResults {
 		filter := NewFilter()
-		mockFilterer := NewMockFilter(true)
+		mockFilterer := filtermock.NewMockFilter(true)
 		for i := 1; i <= test.qty; i++ {
 			filter.Add(mockFilterer)
 		}
@@ -56,11 +60,12 @@ func TestIsOK(t *testing.T) {
 	for _, test := range isOKResults {
 		filter := NewFilter()
 		for _, result := range test.results {
-			filter.Add(NewMockFilter(result))
+			filter.Add(filtermock.NewMockFilter(result))
 		}
 
-		if filter.OK(nil) != test.expected {
-			t.Errorf("%v does not equal %v", filter.OK(nil), test.expected)
+		fileMock := file.NewFile("", filemock.NewFileInfoMock())
+		if filter.OK(fileMock) != test.expected {
+			t.Errorf("%v does not equal %v", filter.OK(fileMock), test.expected)
 		}
 	}
 }

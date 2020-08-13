@@ -44,18 +44,18 @@ Each `filter` implements the `filterer` interface, which requires one method.
 
 ```go
 type Filterer interface {
-    OK(file os.FileInfo) bool
+    OK(file File) bool
 }
 ```
 
 An example of filtering search results, continue from above:
 
 ```go
-var f = []os.FileInfo{}
+var f = []File{}
 
 // put search results in f...
 
-results := []os.FileInfo{}
+results := []File{}
 for x := range f {
     if filter.OK(x) {
         results = append(results, x)
