@@ -19,7 +19,7 @@ func ProductFilesFromDirectoriesRecursively(paths []string, filter filters.Filte
 				log.Printf(err.Error())
 				return filepath.SkipDir
 			}
-			results.Add(file.NewFile(path, f))
+			results.Add(file.NewFile(p, f))
 			return nil
 		})
 		if err != nil {
