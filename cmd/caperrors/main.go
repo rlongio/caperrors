@@ -24,6 +24,7 @@ func main() {
 	fexclude := flag.String("exclude", "", "comma separated values that cannot be present in path")
 	fbefore := flag.String("before", "", "YYYY-MM-DD date that results must come before")
 	fafter := flag.String("after", "", "YYYY-MM-DD date that results must come after")
+	flimit := flag.Uint("limit", 0, "limit the number of results to return")
 
 	flag.Parse()
 
@@ -38,6 +39,7 @@ func main() {
 	noextensions := filters.NewNone([]string{ //TODO Dev only, prevents from including gz files
 		".gz",
 	})
+	limit := filters.NewLimit(*flimit)
 
 	filter := filters.NewFilter()
 	filter.Add(any)
@@ -46,6 +48,7 @@ func main() {
 	filter.Add(after)
 	filter.Add(extensions)
 	filter.Add(noextensions)
+	filter.Add(limit)
 
 	filePaths = append(filePaths, *searchPath)
 

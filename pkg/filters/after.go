@@ -11,7 +11,7 @@ type After struct {
 	value time.Time
 }
 
-// OK returns true if value occured after After
+// OK returns true if value occurred after After
 func (a After) OK(f file.Filer) bool {
 	if (a.value == time.Time{}) {
 		return true
