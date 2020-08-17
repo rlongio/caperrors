@@ -25,6 +25,7 @@ func main() {
 	fbefore := flag.String("before", "", "YYYY-MM-DD date that results must come before")
 	fafter := flag.String("after", "", "YYYY-MM-DD date that results must come after")
 	flimit := flag.Uint("limit", 0, "limit the number of results to return")
+	fdiagnostic := flag.Bool("diagnostic", false, "Set to true for use as Debugger Diagnostic")
 
 	flag.Parse()
 
@@ -54,6 +55,9 @@ func main() {
 
 	var wg sync.WaitGroup
 	var fx = product.Product.Print
+	if *fdiagnostic {
+		fx = product.Product.PrintDiagnosticOutput
+	}
 
 	ch := make(chan product.File)
 	log.Printf("gathering product files..")
